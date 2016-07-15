@@ -19,9 +19,9 @@ namespace gstorm {
     namespace gpu {
 
 
-      template<typename F, typename T, typename... Ts>
-      auto __first(F&& func, T&& arg, Ts&& ...) {
-        return func(arg);
+      template<typename T, typename... Ts>
+      const T& __first(T&& arg, Ts&& ...) {
+        return arg;
       }
 
       namespace detail {
@@ -134,6 +134,8 @@ namespace gstorm {
                 auto g = Thread::get().global;
                 detail::__grid_point<decltype(g.x)> __id(g.x, g.y, g.z);
 
+                if (g.x >= __first(out...).end() - __first(out...).begin()) return;
+
                 auto outIt =
                     detail::__decorate<typename OutputRng::iterator::range>(forward_as_tuple(out...)).begin() + __id;
 
@@ -148,10 +150,6 @@ namespace gstorm {
                     }(subtuple<scan<sizeof...(Args), I>(a), getAt<sizeof...(Args), I>(a)>(
                         targs)...);
 
-                auto proj = [&](auto&& ... args) {
-                  return forward_as_tuple((*(args.begin() + __id))...);
-                };
-
                 *outIt = meta::apply(
                     [&](auto&& ... args) {
                       auto rngs = make_tuple(
@@ -163,7 +161,8 @@ namespace gstorm {
                     truncated);
 
               },
-              {{1},{1}});
+              {{static_cast<size_t>((std::get<0>(out).end() - std::get<0>(out).begin() + 127) / 128)},
+               {128}});
           meta::apply(k, arg_tuple);
         }
       };

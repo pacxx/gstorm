@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="CPP_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/tests/transform.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/meta/static_const.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/meta/tuple_helper.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/action.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/detail/traits.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/detail/views/scalar.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/detail/views/vector.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/detail/views/zip.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/detail/actions/transform.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/detail/actions/gpu_transform.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/view.h" isTestSource="false" />
+    </content>
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library">
+      <library name="Header Search Paths">
+        <CLASSES>
+          <root url="file://C:/cygwin64/lib/gcc/x86_64-pc-cygwin/5.4.0/include" />
+          <root url="file://C:/cygwin64/usr/include" />
+        </CLASSES>
+        <SOURCES>
+          <root url="file://C:/cygwin64/lib/gcc/x86_64-pc-cygwin/5.4.0/include" />
+          <root url="file://C:/cygwin64/usr/include" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+  </component>
+</module>

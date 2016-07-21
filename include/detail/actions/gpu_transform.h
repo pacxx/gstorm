@@ -5,7 +5,7 @@
 #ifndef GSTORM_GPU_TRANSFORM_H
 #define GSTORM_GPU_TRANSFORM_H
 
-#if 0
+#if !(defined(__CYGWIN__) && !defined(_WIN32)) // this is not pacxx disable GPU code
 
 #include <tuple>
 #include <utility>

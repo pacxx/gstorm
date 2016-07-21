@@ -5,6 +5,8 @@
 #ifndef GSTORM_GPU_TRANSFORM_H
 #define GSTORM_GPU_TRANSFORM_H
 
+#if 0
+
 #include <tuple>
 #include <utility>
 #include <cstddef>
@@ -209,5 +211,7 @@ namespace gstorm {
     }
   }
 }
+
+#endif
 
 #endif //GSTORM_GPU_TRANSFORM_H

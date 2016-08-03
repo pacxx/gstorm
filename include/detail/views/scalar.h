@@ -17,17 +17,17 @@ namespace gstorm {
     template<typename T>
     struct _scalar_view  {
     public:
-
+        using storage_type = std::conditional_t<std::is_reference<T>::value, std::remove_reference_t<T>*, T>;
         using base_type = T;
         using value_type = T;
         using reference = const value_type&;
         using size_type = size_t;
 
-        using difference_type = unsigned long long;
+        using difference_type = std::ptrdiff_t;
 
       struct iterator : public std::random_access_iterator_tag {
         using range = _scalar_view<T>;
-        using difference_type = unsigned long long;
+        using difference_type = std::ptrdiff_t;
         using value_type = T;
         using reference = const value_type&;
         using rvalue_reference = value_type&&;
@@ -35,10 +35,12 @@ namespace gstorm {
 
         iterator() = default;
 
-        iterator(T value) : _value(value) { }
+        iterator(storage_type value) : _value(value) { }
 
-        reference operator*() { return _value; }
-        value_type operator*() const { return _value; }
+        template<typename U = storage_type, std::enable_if_t<std::is_pointer<U>::value>* = nullptr> 
+        const auto& operator*() const { return *_value; }
+        template<typename U = storage_type, std::enable_if_t<!std::is_pointer<U>::value>* = nullptr> 
+        auto operator*() const { return _value; }
 
         iterator& operator++() {
             return *this;
@@ -102,10 +104,14 @@ namespace gstorm {
 
         bool operator!=(const iterator& other) const { return true; }
 
-        auto unwrap() { return std::make_tuple(_value); }
+        template<typename U = storage_type, std::enable_if_t<!std::is_pointer<U>::value>* = nullptr> 
+        auto unwrap() { return std::tuple<T>(_value); }
+        template<typename U = storage_type, std::enable_if_t<std::is_pointer<U>::value>* = nullptr> 
+        auto unwrap() { return std::tuple<const T&>(*_value); }
+        
 
       private:
-        T _value;
+        storage_type _value;
       };
 
       using sentinel = iterator;
@@ -113,16 +119,19 @@ namespace gstorm {
 
         _scalar_view() = default;
 
-        _scalar_view(T value) : _value(value) { }
+        template<typename U = storage_type, std::enable_if_t<!std::is_pointer<U>::value>* = nullptr> 
+        _scalar_view(const T& value) : _value(value) { }
+        template<typename U = storage_type, std::enable_if_t<std::is_pointer<U>::value>* = nullptr> 
+        _scalar_view(const T& value) : _value(&value) { }
 
-        _scalar_view(const construction_type& tpl) : _value(std::get<0>(tpl)) { }
+        _scalar_view(const construction_type& tpl) : _scalar_view(std::get<0>(tpl)) { }
 
       iterator begin() { return iterator(_value); }
 
       sentinel end() { return sentinel(_value); }
 
     private:
-      T _value;
+      storage_type _value;
     };
 
     template<typename T>

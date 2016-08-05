@@ -1,24 +1,25 @@
 //
-// Created by mhaidl on 05/07/16.
+// Created by mhaidl on 05/08/16.
 //
 
-#ifndef GSTORM_VECTOR_VIEW_H
-#define GSTORM_VECTOR_VIEW_H
+#ifndef GSTORM_VIEW_TRANSFORM_H
+#define GSTORM_VIEW_TRANSFORM_H
 
 #include <tuple>
 #include <iterator>
 #include <vector>
 #include <detail/traits.h>
+#include "materialize.h"
 
 namespace gstorm {
   namespace view {
 
-    template<typename T>
-    struct _vector_view : public traits::range_forward_traits<T> {
+    template<typename T, typename F>
+    struct _transform_view : public traits::range_forward_traits<T> {
     public:
 
       struct iterator : public std::random_access_iterator_tag {
-        using range = _vector_view<T>;
+        using range = _transform_view<T, F>;
         using difference_type = typename T::difference_type;
         using value_type = typename T::value_type;
         using reference = value_type&;
@@ -27,11 +28,9 @@ namespace gstorm {
 
         iterator() = default;
 
-        iterator(typename T::iterator it, T* __owner) : it(it), __owner(__owner) { }
+        iterator(typename T::iterator it, T* __owner, F func) : it(it), __owner(__owner), _func(func) {}
 
-        reference operator*() { return *it; }
-
-        value_type operator*() const { return *it; }
+        value_type operator*() const { return _func(*it); }
 
         iterator& operator++() {
           ++it;
@@ -41,7 +40,7 @@ namespace gstorm {
         iterator operator++(int) {
           auto ip = it;
           ++it;
-          return iterator(ip, __owner);
+          return iterator(ip, __owner, _func);
         }
 
         iterator& operator--() {
@@ -52,21 +51,21 @@ namespace gstorm {
         iterator operator--(int) {
           auto ip = it;
           --it;
-          return iterator(ip, __owner);
+          return iterator(ip, __owner, _func);
         }
 
         reference operator[](difference_type n) { return *(it + n); }
 
         friend iterator operator+(const iterator& lhs, difference_type n) {
-          return iterator(lhs.it + n, lhs.__owner);
+          return iterator(lhs.it + n, lhs.__owner, lhs._func);
         }
 
         friend iterator operator+(difference_type n, const iterator& rhs) {
-          return iterator(rhs.it + n, rhs.__owner);
+          return iterator(rhs.it + n, rhs.__owner, rhs._func);
         }
 
         friend iterator operator-(const iterator& lhs, difference_type n) {
-          return iterator(lhs.it - n, lhs.__owner);
+          return iterator(lhs.it - n, lhs.__owner, lhs._func);
         }
 
         friend difference_type operator-(const iterator& left, const iterator& right) {
@@ -108,35 +107,44 @@ namespace gstorm {
       private:
         typename T::iterator it;
         T* __owner;
+        F _func;
       };
 
       using sentinel = iterator;
       using construction_type = std::tuple<T&>;
 
-      _vector_view() = default;
+      _transform_view() = default;
 
-      _vector_view(T& vec) : __owner(&vec) { }
+      _transform_view(T& vec, F func) : __owner(vec), _func(func) {}
 
-      _vector_view(const construction_type& tpl) : __owner(&std::get<0>(tpl)) { }
+      _transform_view(const construction_type& tpl) : __owner(std::get<0>(tpl)) {}
 
-      iterator begin() const { return iterator(std::begin(*__owner), __owner); }
+      iterator begin() { return iterator(std::begin(__owner), &__owner, _func); }
 
-      sentinel end() const { return sentinel(std::end(*__owner), __owner); }
+      sentinel end() { return sentinel(std::end(__owner), &__owner, _func); }
+
+
+      template<typename ToType>
+      operator ToType() {
+        return materialize.transform<ToType>(*this, [](auto in) { return in; });
+      }
+
 
     private:
-      T* __owner;
+      T __owner;
+      F _func;
     };
 
-    template<typename T, typename A>
-    auto vector(std::vector<T, A>& cont) {
-      return _vector_view<std::vector<T, A>>(cont);
+    template<typename Rng, typename F>
+    auto transform(Rng& cont, F func) {
+      return _transform_view<Rng, F>(cont, func);
     }
 
-    template<typename T>
-    auto vector(std::tuple<T&>& cont) {
-      return _vector_view<T>(cont);
+    template<typename T, typename F>
+    auto transform(std::tuple<T&>& cont, F func) {
+      return _transform_view<T, F>(cont, func);
     }
 
   }
 }
-#endif //GSTORM_VECTOR_VIEW_H
+#endif //GSTORM_TRANSFORM_H

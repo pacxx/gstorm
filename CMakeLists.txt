@@ -28,5 +28,5 @@ endif(!WIN32)
 
 include_directories("./include")
 
-set(SOURCE_FILES tests/transform.cpp include/view.h include/action.h include/meta/static_const.h include/detail/views/vector.h include/detail/actions/transform.h include/detail/views/zip.h include/detail/traits.h include/meta/tuple_helper.h include/detail/actions/gpu_transform.h include/detail/views/scalar.h)
+set(SOURCE_FILES tests/transform.cpp include/view.h include/action.h include/meta/static_const.h include/detail/views/vector.h include/detail/actions/transform.h include/detail/views/zip.h include/detail/traits.h include/meta/tuple_helper.h include/detail/actions/gpu_transform.h include/detail/views/scalar.h include/detail/views/materialize.h include/detail/views/transform.h)
 add_executable(gstorm ${SOURCE_FILES})

@@ -8,5 +8,6 @@
 #include <detail/views/vector.h>
 #include <detail/views/zip.h>
 #include <detail/views/scalar.h>
+#include <detail/views/transform.h>
 
 #endif //GSTORM_VIEW_H_H

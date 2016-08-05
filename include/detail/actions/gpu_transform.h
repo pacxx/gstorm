@@ -139,22 +139,23 @@ namespace gstorm {
                 if (g.x >= __first(out...).end() - __first(out...).begin()) return;
 
                 auto outIt =
-                    detail::__decorate<typename OutputRng::iterator::range>(forward_as_tuple(out...)).begin() + __id;
+                    detail::__decorate<typename OutputRng::iterator::range>(std::forward_as_tuple(out...)).begin() +
+                    __id;
 
                 constexpr size_t a[sizeof...(Args)] = {traits::view_traits<
                     std::remove_reference_t<typename std::remove_reference_t<Args>::iterator::range>>::arity...};
 
-                auto targs = forward_as_tuple(args...);
+                auto targs = std::forward_as_tuple(args...);
                 auto truncated =
                     [&](const auto& ... tuples) {
                       return subtuple<0, sizeof...(Args)>(
-                          forward_as_tuple(tuples...));
+                          std::forward_as_tuple(tuples...));
                     }(subtuple<scan<sizeof...(Args), I>(a), getAt<sizeof...(Args), I>(a)>(
                         targs)...);
 
                 *outIt = meta::apply(
                     [&](auto&& ... args) {
-                      auto rngs = make_tuple(
+                      auto rngs = std::make_tuple(
                           (detail::__decorate<std::remove_reference_t<typename std::remove_reference_t<Args>::iterator::range>>(args).begin() + __id)...);
                       return meta::apply([&](auto&&... args) {
                         return func(std::forward_as_tuple(*args...));
@@ -175,7 +176,7 @@ namespace gstorm {
             typename OutputRng, typename... Args, typename UnaryOp>
         auto operator()(InputRng<Args...>& inRng, OutputRng& outRng,
                          UnaryOp&& func) {
-          auto input = meta::apply([](auto&& ... args) { return tuple_cat(args.begin().unwrap()...); },
+          auto input = meta::apply([](auto&& ... args) { return std::tuple_cat(args.begin().unwrap()...); },
                                    inRng._getRngs());
           auto output = outRng.begin().unwrap();
           transform_invoker<OutputRng, Args...> invoke;
@@ -185,26 +186,6 @@ namespace gstorm {
         }
       }; 
 
-/*      struct _transform{
-        template <typename InputRng, typename OutRng, typename UnaryFunc>
-        auto operator()(InputRng& inRng, OutRng& outRng, UnaryFunc func) {
-
-          auto inUR = inRng.begin().unwrap();
-          inUR.blub();
-          auto outUR= outRng.begin().unwrap();
-          outUR.bla();
-
-
-          pacxx::v2::kernel([](InputRng& inRng, OutRng& outRng, UnaryFunc func){
-            auto i = Thread::get().global.x;
-
-            auto out = outRng.begin() + i;
-            *out = func(*(inRng.begin() + i));
-
-          }, {{1}, {1}})(inRng, outRng, func);
-
-        }
-      }; */
 
       auto transform = gstorm::static_const<_transform>::value;
 

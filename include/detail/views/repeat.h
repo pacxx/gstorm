@@ -2,8 +2,8 @@
 // Created by Michael on 21.07.2016.
 //
 
-#ifndef GSTORM_SCALAR_H
-#define GSTORM_SCALAR_H
+#ifndef GSTORM_REPEAT_H
+#define GSTORM_REPEAT_H
 
 #include <tuple>
 #include <iterator>
@@ -15,7 +15,7 @@ namespace gstorm {
   namespace view {
 
     template<typename T>
-    struct _scalar_view  {
+    struct _repeat_view {
     public:
         using storage_type = std::conditional_t<std::is_reference<T>::value, std::remove_reference_t<T>*, T>;
         using base_type = T;
@@ -26,7 +26,7 @@ namespace gstorm {
         using difference_type = std::ptrdiff_t;
 
       struct iterator : public std::random_access_iterator_tag {
-        using range = _scalar_view<T>;
+        using range = _repeat_view<T>;
         using difference_type = std::ptrdiff_t;
         using value_type = T;
         using reference = const value_type&;
@@ -117,14 +117,14 @@ namespace gstorm {
       using sentinel = iterator;
       using construction_type = std::tuple<T>;
 
-        _scalar_view() = default;
+      _repeat_view() = default;
 
-        template<typename U = storage_type, std::enable_if_t<!std::is_pointer<U>::value>* = nullptr> 
-        _scalar_view(const T& value) : _value(value) { }
-        template<typename U = storage_type, std::enable_if_t<std::is_pointer<U>::value>* = nullptr> 
-        _scalar_view(const T& value) : _value(&value) { }
+        template<typename U = storage_type, std::enable_if_t<!std::is_pointer<U>::value>* = nullptr>
+        _repeat_view(const T& value) : _value(value) {}
+        template<typename U = storage_type, std::enable_if_t<std::is_pointer<U>::value>* = nullptr>
+        _repeat_view(const T& value) : _value(&value) {}
 
-        _scalar_view(const construction_type& tpl) : _scalar_view(std::get<0>(tpl)) { }
+      _repeat_view(const construction_type& tpl) : _repeat_view(std::get<0>(tpl)) {}
 
       iterator begin() { return iterator(_value); }
 
@@ -135,16 +135,17 @@ namespace gstorm {
     };
 
     template<typename T>
-    auto scalar(const T value) {
-      return _scalar_view<T>(value);
+    auto repeat(const T value) {
+      return _repeat_view<T>(value);
     }
 
     template<typename T>
-    auto scalar(std::tuple<T>& cont) {
-      return _scalar_view<T>(cont);
+    auto repeat(std::tuple<T>& cont) {
+      return _repeat_view<T>(cont);
     }
 
   }
 }
 
-#endif //GSTORM_SCALAR_H
+#endif // GSTORM_REPEAT_H
+

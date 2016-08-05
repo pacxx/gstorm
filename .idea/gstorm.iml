@@ -8,7 +8,7 @@
       <sourceFolder url="file://$MODULE_DIR$/include/action.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/detail/traits.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/detail/views/materialize.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/include/detail/views/scalar.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/detail/views/repeat.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/detail/views/zip.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/detail/views/transform.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/detail/views/vector.h" isTestSource="false" />

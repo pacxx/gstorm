@@ -18,12 +18,11 @@ include_directories("${PACXX_PATH}/kronos")
 include_directories("${PACXXRT_PATH}/include")
 
 link_directories("${PACXX_PATH}/lib")
-link_directories("${PACXXRT_PATH}/../build_pacxx")
+link_directories("${PACXXRT_PATH}/build")
 
 target_link_libraries(gstorm pacxxrt2 pacxxhook c++ c++abi )
 else(!WIN32)
     add_compile_options(-std=c++14)
-
 endif(!WIN32)
 
 include_directories("./include")

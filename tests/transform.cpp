@@ -7,29 +7,69 @@
 
 using namespace gstorm;
 using namespace std;
+using namespace pacxx::v2;
 
-int main()
+template<typename T>
+void __print(const T& rng) {
+  for (auto v : rng)
+    cout << v;
+  cout << endl;
+}
+
+
+int main(int argc, char *argv[])
 {
-  vector<int> a(100), b(100), c(100), d(100);
+
+  size_t count = 100;
+  if (argc >= 2)
+    count = stoi(argv[1]);
+
+  cout << "test for " << count << " elements" << endl;
+  vector<int> a(count), b(count), c(count), d(count), e(1);
   fill(a.begin(), a.end(), 1);
 
-  auto view1 = view::vector(a);
-  auto view2 = view::vector(b);
-  auto sa = view::scalar(5);
+  auto view1 = range::vector(a);
+//  auto view2 = range::vector(b);
+  //  auto ref = view::repeat<const decltype(e)&>(e);
+  //  auto ref = view::scalar<int>(5);
 
-  action::transform(view1, view2);
 
-  auto zip1 = view::zip(a, b, sa);
-  auto saxpy = [](auto x, auto y, auto a){ return a * x + y; };
+  auto gcopy = a | gpu::copy | gpu::action::transform([](auto in) { return in * 2; });
 
-  action::transform(zip1, c, [=](auto&& tpl){ return meta::apply(saxpy, tpl);});
+  std::vector<int> copy_from_a = a | gpu::copy | gpu::action::transform([](auto in) { return in * 2; });;
 
-//  action::gpu::transform(zip1, d, [](auto&& tpl){ return get<0>(tpl) + get<1>(tpl);});
+  __print(copy_from_a);
 
-  for (auto v : c) cout << v;
-  cout << endl;
+  auto t1 = view::transform(view1, [](auto in) { return in * 2; });
 
-  for (auto v : d) cout << v;
-  cout << endl;
+  vector<int> x = view::transform(view1, [](auto in) { return in * 3; });
+
+//  action::transform(t1, b);
+
+//  __print(x);
+//  __print(b);
+
+
+
+
+//  auto op = [](auto x, auto y, const auto& v) { return v[0] * x + y; };
+//
+//  auto forward_tpl = [=](auto&& tpl) { return meta::apply(op, tpl); };
+//
+//  auto zip1 = view::zip(a, b, ref);
+//
+//  action::transform(zip1, c, forward_tpl);
+//
+//  action::gpu::transform(zip1, d, forward_tpl);
+//
+//  for (auto v : c) cout << v;
+//  cout << endl;
+//
+//  auto& exec = get_executor();
+//  auto& md = exec.mm().translateVector(d);
+//  md.download(d.data(), d.size() * sizeof(int), 256);
+//
+//  for (auto v : d) cout << v;
+//  cout << endl;
 
 }

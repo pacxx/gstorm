@@ -12,12 +12,12 @@
 #include <cstddef>
 #include <type_traits>
 #include <detail/ranges/vector.h>
+#include <detail/operators/copy.h>
 #include <meta/tuple_helper.h>
 #include <meta/static_const.h>
 #include <PACXX.h>
 
 namespace gstorm {
-  namespace action {
     namespace gpu {
 
 
@@ -29,7 +29,7 @@ namespace gstorm {
       namespace detail {
         template<typename T>
         struct __grid_point {
-          __grid_point(T x, T y, T z) : x(x), y(y), z(z) { };
+          __grid_point(T x, T y, T z) : x(x), y(y), z(z) {};
 
           operator int() { return static_cast<int>(x); }
 
@@ -46,7 +46,7 @@ namespace gstorm {
 #pragma clang diagnostic ignored "-Wreturn-stack-address"
 
         template<typename T, typename std::enable_if<!std::is_reference<
-            typename T::range::value_type>::value>::type* = nullptr>
+            typename T::range::value_type>::value>::type * = nullptr>
         typename T::reference saveDeRef(T&& iterator, bool enabled) {
           if (enabled)
             return *iterator;
@@ -57,7 +57,7 @@ namespace gstorm {
         }
 
         template<typename T, std::enable_if_t<std::is_reference<
-            typename T::range::value_type>::value>* = nullptr>
+            typename T::range::value_type>::value> * = nullptr>
         typename T::reference saveDeRef(T&& iterator, bool) {
           return *iterator;
         }
@@ -65,13 +65,13 @@ namespace gstorm {
 #pragma clang diagnostic pop
 
         template<typename T, typename U,
-            std::enable_if_t<traits::is_vector<T>::value>* = nullptr>
+            std::enable_if_t<traits::is_vector<T>::value> * = nullptr>
         auto __decorate(U&& vec) {
           return range::_vector_gpu<T>(vec);
         }
 
         template<typename T, typename U,
-            typename std::enable_if<!traits::is_vector<T>::value>::type* = nullptr>
+            typename std::enable_if<!traits::is_vector<T>::value>::type * = nullptr>
         auto __decorate(U&& args) {
           return T(args);
         }
@@ -124,70 +124,133 @@ namespace gstorm {
         using type = std::conditional_t<traits::is_vector<std::remove_reference_t<T>>::value, T, std::decay_t<T>>;
       };
 
-      template<typename OutputRng, typename... Args>
-      struct transform_invoker {
-        template<typename Func, typename... OArgs, typename... KArgs, size_t... I>
-        void operator()(Func& func, std::tuple<OArgs...>& out,
-                        std::tuple<KArgs...>& args, std::index_sequence<I...>) {
+      namespace algorithm {
+        template<typename OutputRng, typename... Args>
+        struct transform_invoker {
+          template<typename Func, typename... OArgs, typename... KArgs, size_t... I>
+          void operator()(Func& func, std::tuple<OArgs...>& out,
+                          std::tuple<KArgs...>& args, std::index_sequence<I...>) {
 
-          auto arg_tuple = std::tuple_cat(out, args);
-          auto k = pacxx::v2::kernel(
-              [&func](OArgs... out, const KArgs... args) {
-                auto g = Thread::get().global;
-                detail::__grid_point<decltype(g.x)> __id(g.x, g.y, g.z);
+            auto arg_tuple = std::tuple_cat(out, args);
+            auto k = pacxx::v2::kernel(
+                [&func](OArgs... out, const KArgs... args) {
+                  auto g = Thread::get().global;
+                  detail::__grid_point<decltype(g.x)> __id(g.x, g.y, g.z);
 
-                if (g.x >= __first(out...).end() - __first(out...).begin()) return;
+                  if (g.x >= __first(out...).end() - __first(out...).begin()) return;
 
-                auto outIt =
-                    detail::__decorate<typename OutputRng::iterator::range>(std::forward_as_tuple(out...)).begin() +
-                    __id;
+                  auto outIt =
+                      detail::__decorate<typename OutputRng::iterator::range>(std::forward_as_tuple(out...)).begin() +
+                      __id;
 
-                constexpr size_t a[sizeof...(Args)] = {traits::view_traits<
-                    std::remove_reference_t<typename std::remove_reference_t<Args>::iterator::range>>::arity...};
+                  constexpr size_t a[sizeof...(Args)] = {traits::view_traits<
+                      std::remove_reference_t<typename std::remove_reference_t<Args>::iterator::range>>::arity...};
 
-                auto targs = std::forward_as_tuple(args...);
-                auto truncated =
-                    [&](const auto& ... tuples) {
-                      return subtuple<0, sizeof...(Args)>(
-                          std::forward_as_tuple(tuples...));
-                    }(subtuple<scan<sizeof...(Args), I>(a), getAt<sizeof...(Args), I>(a)>(
-                        targs)...);
+                  auto targs = std::forward_as_tuple(args...);
+                  auto truncated =
+                      [&](const auto& ... tuples) {
+                        return subtuple<0, sizeof...(Args)>(
+                            std::forward_as_tuple(tuples...));
+                      }(subtuple<scan<sizeof...(Args), I>(a), getAt<sizeof...(Args), I>(a)>(
+                          targs)...);
 
-                *outIt = meta::apply(
-                    [&](auto&& ... args) {
-                      auto rngs = std::make_tuple(
-                          (detail::__decorate<std::remove_reference_t<typename std::remove_reference_t<Args>::iterator::range>>(args).begin() + __id)...);
-                      return meta::apply([&](auto&&... args) {
-                        return func(std::forward_as_tuple(*args...));
-                      }, rngs);
-                    },
-                    truncated);
+                  *outIt = meta::apply(
+                      [&](auto&& ... args) {
+                        auto rngs = std::make_tuple(
+                            (detail::__decorate<std::remove_reference_t<typename std::remove_reference_t<Args>::iterator::range>>(
+                                args).begin() + __id)...);
+                        return meta::apply([&](auto&& ... args) {
+                          return func(std::forward_as_tuple(*args...));
+                        }, rngs);
+                      },
+                      truncated);
 
-              },
-              {{static_cast<size_t>((std::get<0>(out).end() - std::get<0>(out).begin() + 127) / 128)},
-               {128}});
-          meta::apply(k, arg_tuple);
+                },
+                {{static_cast<size_t>((std::get<0>(out).end() - std::get<0>(out).begin() + 127) / 128)},
+                 {128}});
+            meta::apply(k, arg_tuple);
+          }
+        };
+
+
+        struct _transform_algorithm {
+          template<template<typename... Args> class InputRng,
+              typename OutputRng, typename... Args, typename UnaryOp>
+          auto operator()(InputRng<Args...>& inRng, OutputRng& outRng,
+                          UnaryOp&& func) {
+            auto input = meta::apply([](auto&& ... args) { return std::tuple_cat(args.begin().unwrap()...); },
+                                     inRng._getRngs());
+            auto output = outRng.begin().unwrap();
+            transform_invoker<OutputRng, Args...> invoke;
+
+            invoke(func, output, input,
+                   std::make_index_sequence<std::tuple_size<decltype(input)>::value>{});
+          }
+        };
+
+
+        auto transform = gstorm::static_const<_transform_algorithm>::value;
+
+      }
+      namespace action {
+        template<typename T, typename F>
+        struct _transform_action {
+          _transform_action(T&& rng, F func) : _rng(rng), _func(func) {}
+
+          static constexpr size_t thread_count = 128;
+
+          auto operator()() {
+            using value_type = typename T::value_type;
+            auto kernel = pacxx::v2::kernel([](value_type *data, size_t size, F func) {
+              auto id = Thread::get().global;
+
+              if (id.x >= size) return;
+
+              data[id.x] = func(data[id.x]);
+
+            }, {{(_rng.end() - _rng.begin() + thread_count - 1) / thread_count},
+                {thread_count}});
+
+            kernel(_rng.begin(), _rng.end() - _rng.begin(), _func);
         }
-      };
+
+          operator typename T::source_type() {
+            operator()();
+            return _rng;
+          }
+
+        private:
+          T& _rng;
+          F _func;
+        };
+
+        template<typename F>
+        struct _transform_action_helper {
+          _transform_action_helper(F func) : _func(func) {}
+
+          template<typename T>
+          auto operator()(T&& rng) const {
+            return _transform_action<T, F>(std::forward<T>(rng), _func);
+          }
+
+        private:
+          F _func;
+        };
 
 
-    struct _transform {
-        template<template<typename... Args> class InputRng,
-            typename OutputRng, typename... Args, typename UnaryOp>
-        auto operator()(InputRng<Args...>& inRng, OutputRng& outRng,
-                         UnaryOp&& func) {
-          auto input = meta::apply([](auto&& ... args) { return std::tuple_cat(args.begin().unwrap()...); },
-                                   inRng._getRngs());
-          auto output = outRng.begin().unwrap();
-          transform_invoker<OutputRng, Args...> invoke;
-          
-          invoke(func, output, input,
-                 std::make_index_sequence<std::tuple_size<decltype(input)>::value>{});
+        struct _transform {
+          template<typename F>
+          auto operator()(F func) const {
+            return _transform_action_helper<decltype(func)>(func);
+          }
+        };
+
+        auto transform = gstorm::static_const<_transform>();
+
+        template<typename Rng, typename F>
+        auto operator|(Rng&& lhs, const _transform_action_helper<F>& rhs) {
+          return rhs(std::forward<Rng>(lhs));
         }
-      }; 
-
-
-      auto transform = gstorm::static_const<_transform>::value;
 
     }
   }

@@ -11,7 +11,7 @@
 #include <utility>
 #include <cstddef>
 #include <type_traits>
-#include <detail/views/vector.h>
+#include <detail/ranges/vector.h>
 #include <meta/tuple_helper.h>
 #include <meta/static_const.h>
 #include <PACXX.h>
@@ -67,7 +67,7 @@ namespace gstorm {
         template<typename T, typename U,
             std::enable_if_t<traits::is_vector<T>::value>* = nullptr>
         auto __decorate(U&& vec) {
-          return view::_vector_view<T>(vec);
+          return range::_vector_gpu<T>(vec);
         }
 
         template<typename T, typename U,

@@ -4,10 +4,21 @@
 
 #ifndef GSTORM_STATIC_CONST_H
 #define GSTORM_STATIC_CONST_H
+
+#include <utility>
+
 namespace gstorm {
   template<typename T>
   struct static_const {
     static constexpr T value{};
+
+    template<typename... Ts>
+    auto operator()(Ts&& ... args) {
+      return value(std::forward<Ts>(args)...);
+    }
+
+    operator T() { return value; }
+
   };
 
   template<typename T>

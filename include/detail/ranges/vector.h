@@ -2,8 +2,8 @@
 // Created by mhaidl on 05/07/16.
 //
 
-#ifndef GSTORM_VECTOR_VIEW_H
-#define GSTORM_VECTOR_VIEW_H
+#ifndef GSTORM_VECTOR_GPU_H
+#define GSTORM_VECTOR_GPU_H
 
 #include <tuple>
 #include <iterator>
@@ -11,14 +11,14 @@
 #include <detail/traits.h>
 
 namespace gstorm {
-  namespace view {
+  namespace range {
 
     template<typename T>
-    struct _vector_view : public traits::range_forward_traits<T> {
+    struct _vector_gpu : public traits::range_forward_traits<T> {
     public:
 
       struct iterator : public std::random_access_iterator_tag {
-        using range = _vector_view<T>;
+        using range = _vector_gpu<T>;
         using difference_type = typename T::difference_type;
         using value_type = typename T::value_type;
         using reference = value_type&;
@@ -113,11 +113,11 @@ namespace gstorm {
       using sentinel = iterator;
       using construction_type = std::tuple<T&>;
 
-      _vector_view() = default;
+      _vector_gpu() = default;
 
-      _vector_view(T& vec) : __owner(&vec) { }
+      _vector_gpu(T& vec) : __owner(&vec) {}
 
-      _vector_view(const construction_type& tpl) : __owner(&std::get<0>(tpl)) { }
+      _vector_gpu(const construction_type& tpl) : __owner(&std::get<0>(tpl)) {}
 
       iterator begin() const { return iterator(std::begin(*__owner), __owner); }
 
@@ -129,14 +129,14 @@ namespace gstorm {
 
     template<typename T, typename A>
     auto vector(std::vector<T, A>& cont) {
-      return _vector_view<std::vector<T, A>>(cont);
+      return _vector_gpu<std::vector<T, A>>(cont);
     }
 
     template<typename T>
     auto vector(std::tuple<T&>& cont) {
-      return _vector_view<T>(cont);
+      return _vector_gpu<T>(cont);
     }
 
   }
 }
-#endif //GSTORM_VECTOR_VIEW_H
+#endif //GSTORM_VECTOR_GPU_H

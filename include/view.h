@@ -5,7 +5,7 @@
 #ifndef GSTORM_VIEW_H_H
 #define GSTORM_VIEW_H_H
 
-#include <detail/views/vector.h>
+#include <detail/ranges/vector.h>
 #include <detail/views/zip.h>
 #include <detail/views/repeat.h>
 #include <detail/views/transform.h>

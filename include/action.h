@@ -5,7 +5,8 @@
 #define GSTORM_ACTION_H_H
 
 #include <detail/actions/transform.h>
-
 #include <detail/actions/gpu_transform.h>
+#include <detail/ranges/vector.h>
+#include <detail/operators/copy.h>
 
 #endif //GSTORM_ACTION_H_H

@@ -200,11 +200,11 @@ namespace gstorm {
           static constexpr size_t thread_count = 128;
 
           auto operator()() {
-            using value_type = typename T::value_type;
+            using value_type = typename std::remove_reference_t<T>::value_type;
             auto kernel = pacxx::v2::kernel([](value_type *data, size_t size, F func) {
               auto id = Thread::get().global;
 
-              if (id.x >= size) return;
+              if (static_cast<size_t>(id.x) >= size) return;
 
               data[id.x] = func(data[id.x]);
 
@@ -214,7 +214,7 @@ namespace gstorm {
             kernel(_rng.begin(), _rng.end() - _rng.begin(), _func);
         }
 
-          operator typename T::source_type() {
+          operator typename std::remove_reference_t<T>::source_type() {
             operator()();
             return _rng;
           }
@@ -248,9 +248,16 @@ namespace gstorm {
         auto transform = gstorm::static_const<_transform>();
 
         template<typename Rng, typename F>
-        auto operator|(Rng&& lhs, const _transform_action_helper<F>& rhs) {
-          return rhs(std::forward<Rng>(lhs));
+        auto operator|(data::_gpu_copy<Rng>&& lhs, const _transform_action_helper<F>& rhs) {
+          return rhs(std::forward<decltype(lhs)>(lhs));
         }
+
+        template<typename Rng, typename F>
+        auto operator|(const Rng& lhs, const _transform_action_helper<F>& rhs) {
+          // auto gcopy = copy(lhs);
+          Rng a = rhs(lhs | gpu::copy);
+          return a;
+        };
 
     }
   }

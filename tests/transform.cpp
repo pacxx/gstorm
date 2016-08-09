@@ -34,11 +34,12 @@ int main(int argc, char *argv[])
   //  auto ref = view::scalar<int>(5);
 
 
-  auto gcopy = a | gpu::copy | gpu::action::transform([](auto in) { return in * 2; });
+//  auto gcopy = a | gpu::copy | gpu::action::transform([](auto in) { return in * 2; });
 
-  std::vector<int> copy_from_a = a | gpu::copy | gpu::action::transform([](auto in) { return in * 2; });;
-
-  __print(copy_from_a);
+//  std::vector<int> copy_from_a  = a | gpu::copy | gpu::action::transform([](auto in) { return in * 2; });;
+  std::vector<int> copy_from_a2 = a | gpu::action::transform([](auto in) { return in * 2; });;
+//  __print(copy_from_a);
+  __print(copy_from_a2);
 
   auto t1 = view::transform(view1, [](auto in) { return in * 2; });
 

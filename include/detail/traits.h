@@ -10,10 +10,9 @@ namespace gstorm {
     struct range_forward_traits {
       using base_type = T;
 
-      using reference = typename T::reference;
       using size_type = typename T::size_type;
       using value_type = typename T::value_type;
-      using refernece = typename T::reference;
+      using reference = std::conditional_t<std::is_const<T>::value, const typename T::reference, typename T::reference>;
       using const_reference = typename T::const_reference;
       using difference_type = typename T::difference_type;
     };

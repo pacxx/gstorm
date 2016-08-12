@@ -19,29 +19,34 @@ namespace gstorm {
     template<typename T>
     struct gvector : public traits::range_forward_traits<T> {
     public:
+      using size_type = typename T::size_type;
+      using value_type = typename T::value_type;
+      using reference = std::conditional_t<std::is_const<T>::value, const typename T::reference, typename T::reference>;
+      using const_reference = typename T::const_reference;
+      using difference_type = typename T::difference_type;
 
-      struct iterator : public ranges::v3::random_access_iterator_tag {
-        using difference_type = typename T::difference_type;
+      struct iterator : public ranges::v3::random_access_iterator_tag, public traits::range_forward_traits<T> {
+        using size_type = typename T::size_type;
         using value_type = typename T::value_type;
-        using reference = value_type&;
-        using const_reference = const value_type&;
-        using rvalue_reference = value_type&&;
+        using reference = std::conditional_t<std::is_const<T>::value, const typename T::reference, typename T::reference>;
+        using const_reference = typename T::const_reference;
+        using difference_type = typename T::difference_type;
         using iterator_category = ranges::v3::random_access_iterator_tag;
 
         iterator() = default;
 
         explicit iterator(typename T::value_type* it) : it(it) {}
 
-     //   reference operator*() { return *it; }
+        reference operator*() { return *it; }
 
-        const_reference operator*() const { return *it; }
+        reference operator*() const { return *it; }
 
         iterator& operator++() {
           ++it;
           return *this;
         }
 
-        iterator operator++(int) {
+        iterator operator++(int) const {
           auto ip = it;
           ++it;
           return iterator(ip);
@@ -52,7 +57,7 @@ namespace gstorm {
           return *this;
         }
 
-        iterator operator--(int) {
+        iterator operator--(int) const {
           auto ip = it;
           --it;
           return iterator(ip);
@@ -61,7 +66,12 @@ namespace gstorm {
         reference operator[](difference_type n) { return *(it + n); }
 
         friend iterator advance(const iterator& lhs, difference_type n) {
-          return iterator(lhs.it + n);
+          return lhs.advance(n);
+        }
+
+        iterator advance(difference_type n) const {
+          it += n;
+          return *this;
         }
 
         friend iterator operator+(const iterator& lhs, difference_type n) {
@@ -111,7 +121,7 @@ namespace gstorm {
         bool operator!=(const iterator& other) const { return other.it != it; }
 
       private:
-        typename T::value_type* it;
+        mutable typename T::value_type* it;
       };
 
       using sentinel = iterator;
@@ -153,7 +163,7 @@ namespace gstorm {
       const iterator begin() const noexcept { return iterator(_ptr); }
       const iterator end() const noexcept { return iterator(_ptr + _size); }
 
-      operator T(){
+      operator std::remove_cv_t<T>() const {
         T tmp(_size);
 #ifndef __device_code__
         auto buffer = pacxx::v2::get_executor().rt().translateMemory(_ptr);

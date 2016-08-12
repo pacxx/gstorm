@@ -32,7 +32,7 @@ namespace gstorm
 
           if (static_cast<size_t>(id.x) >= distance) return;
 
-          out[id.x] = func(*(in + id.x));
+          *(out + id.x) = func(*(in + id.x));
 
         }, {{(distance + thread_count - 1) / thread_count},
             {thread_count}});

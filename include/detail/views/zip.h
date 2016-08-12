@@ -176,7 +176,7 @@ namespace gstorm {
 
     template<typename T, std::enable_if_t<traits::is_vector<std::remove_reference_t<T>>::value>* = nullptr>
     auto __decorate(T&& vec) {
-      return range::_vector_gpu<std::remove_reference_t<T>>(vec);
+      return range::gvector<std::remove_reference_t<T>>(vec);
     }
 
     template<typename T, std::enable_if_t<!traits::is_vector<std::remove_reference_t<T>>::value>* = nullptr>

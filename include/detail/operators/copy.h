@@ -7,6 +7,8 @@
 
 #include <detail/traits.h>
 #include <meta/static_const.h>
+#include <detail/ranges/vector.h>
+
 #include <PACXX.h>
 
 namespace gstorm {
@@ -24,10 +26,14 @@ namespace gstorm {
           _dev_copy.upload(vec.data(), vec.size());
         }
 
+        ~_gpu_copy(){
+          _dev_copy.abandon();
+          __error("dead");
+        }
 
         operator T() {
           T ret(_count);
-
+          __warning("_gpu_copy collapsing");
           _dev_copy.download(ret.data(), ret.size());
 
           return ret;
@@ -47,14 +53,14 @@ namespace gstorm {
 
     struct _copy {
       template<typename T>
-      auto operator()(const T& input) const {
+      auto operator()(T& input) const {
         static_assert(traits::is_vector<T>::value && "Only std::vector is currently supported!");
-        return data::_gpu_copy<T>(input);
+        return range::gpu_vector(input);
       }
     };
 
     template<typename T>
-    auto operator|(const T& lhs, const _copy& rhs) {
+    auto operator|(T& lhs, const _copy& rhs) {
       return rhs(lhs);
     }
 

@@ -36,8 +36,8 @@ int main(int argc, char *argv[])
 
 //  auto gcopy = a | gpu::copy | gpu::action::transform([](auto in) { return in * 2; });
 
-//  std::vector<int> copy_from_a  = a | gpu::copy | gpu::action::transform([](auto in) { return in * 2; });;
-  std::vector<int> copy_from_a2 = a | gpu::action::transform([](auto in) { return in * 2; });;
+//  std::vector<int> copy_from_a  = a | gpu::copy | gpu::action::transform([](auto in) { return in * 2; });
+  std::vector<int> copy_from_a2 = a | gpu::action::transform([](auto in) { return in * 2; });
 //  __print(copy_from_a);
   __print(copy_from_a2);
 

@@ -5,16 +5,18 @@
       <sourceFolder url="file://$MODULE_DIR$/tests/transform.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/meta/static_const.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/meta/tuple_helper.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/gstorm.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/action.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/detail/traits.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/include/detail/views/materialize.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/detail/views/transform.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/include/detail/views/repeat.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/detail/views/zip.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/include/detail/ranges/vector.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/detail/views/repeat.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/detail/views/materialize.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/detail/operators/copy.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/detail/actions/old_transform.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/detail/actions/transform.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/include/detail/actions/gpu_transform.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/detail/actions/gpu/transform.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/detail/ranges/vector.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/view.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
     </content>

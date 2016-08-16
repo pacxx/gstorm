@@ -19,6 +19,7 @@ namespace gstorm {
     template<typename T>
     struct gvector : public traits::range_forward_traits<T> {
     public:
+      using source_type = T;
       using size_type = typename T::size_type;
       using value_type = typename T::value_type;
       using reference = std::conditional_t<std::is_const<T>::value, const typename T::reference, typename T::reference>;
@@ -126,54 +127,52 @@ namespace gstorm {
 
       using sentinel = iterator;
 
-      gvector() : _ptr(nullptr), _size(0) { }
+      gvector() : _buffer(nullptr), _size(0) {}
 
-      gvector(T& vec) : _size(vec.size()) {
-#ifndef __device_code__
-        auto& buffer = pacxx::v2::get_executor().allocate<typename T::value_type>(vec.size());
-        _ptr = buffer.get();
-        buffer.upload(vec.data(), vec.size());
-#endif
+      gvector(size_t size) : _buffer(&pacxx::v2::get_executor().allocate<typename T::value_type>(size)),
+                             _size(size) {}
+
+      gvector(T& vec) : gvector(vec.size()) {
+        _buffer->upload(vec.data(), vec.size());
       }
 
-      ~gvector(){
-#ifndef __device_code__
-        if (_ptr) {
-          auto buffer = pacxx::v2::get_executor().rt().translateMemory(_ptr);
-          buffer->abandon();
-        }
-#endif
+      ~gvector() {
+        if (_buffer)
+          _buffer->abandon();
       }
 
-      gvector(const gvector&) = default;
+      gvector(const gvector& other) : _buffer(other._buffer), _size(other._size) {
+        if (_buffer)
+          _buffer->mercy();
+      };
 
-      gvector(gvector&& other)
-      {
-        _ptr = other._ptr;
-        other._ptr = nullptr;
+      gvector(gvector&& other) {
+        _buffer = other._buffer;
+        other._buffer = nullptr;
         _size = other._size;
         other._size = 0;
       }
+
       gvector& operator=(const gvector&) = delete;
+
       gvector& operator=(gvector&&) = delete;
 
-      iterator begin() noexcept { return iterator(_ptr); }
-      iterator end() noexcept { return iterator(_ptr + _size); }
+      iterator begin() noexcept { return iterator(_buffer->get()); }
 
-      const iterator begin() const noexcept { return iterator(_ptr); }
-      const iterator end() const noexcept { return iterator(_ptr + _size); }
+      iterator end() noexcept { return iterator(_buffer->get(_size)); }
+
+      const iterator begin() const noexcept { return iterator(_buffer->get()); }
+
+      const iterator end() const noexcept { return iterator(_buffer->get(_size)); }
 
       operator std::remove_cv_t<T>() const {
         T tmp(_size);
-#ifndef __device_code__
-        auto buffer = pacxx::v2::get_executor().rt().translateMemory(_ptr);
-        buffer->download(tmp.data(), tmp.size());
-#endif
+        _buffer->download(tmp.data(), tmp.size());
         return tmp;
       }
 
     private:
-      typename T::value_type* _ptr;
+      pacxx::v2::DeviceBuffer<typename T::value_type>* _buffer;
       size_t _size;
     };
 

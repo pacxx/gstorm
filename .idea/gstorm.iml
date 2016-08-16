@@ -6,32 +6,26 @@
       <sourceFolder url="file://$MODULE_DIR$/include/meta/static_const.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/meta/tuple_helper.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/gstorm.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/include/action.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/detail/traits.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/detail/views/transform.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/include/detail/views/zip.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/detail/views/repeat.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/include/detail/views/materialize.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/detail/views/zip.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/detail/operators/async.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/detail/operators/copy.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/include/detail/actions/old_transform.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/include/detail/actions/transform.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/detail/actions/gpu/transform.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/detail/ranges/vector.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/include/view.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
       <library name="Header Search Paths">
         <CLASSES>
-          <root url="file:///usr/lib/gcc/x86_64-pc-linux-gnu/6.1.1/include" />
-          <root url="file:///usr/lib/gcc/x86_64-pc-linux-gnu/6.1.1/include-fixed" />
+          <root url="file:///usr/lib/llvm-3.8/lib/clang/3.8.0/include" />
           <root url="file:///usr/include" />
           <root url="file:///usr/local/include" />
         </CLASSES>
         <SOURCES>
-          <root url="file:///usr/lib/gcc/x86_64-pc-linux-gnu/6.1.1/include" />
-          <root url="file:///usr/lib/gcc/x86_64-pc-linux-gnu/6.1.1/include-fixed" />
+          <root url="file:///usr/lib/llvm-3.8/lib/clang/3.8.0/include" />
           <root url="file:///usr/include" />
           <root url="file:///usr/local/include" />
         </SOURCES>

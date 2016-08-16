@@ -14,48 +14,11 @@
 namespace gstorm {
   namespace gpu {
 
-    namespace data {
-      template<typename T>
-      struct _gpu_copy {
-
-        using value_type = typename T::value_type;
-        using source_type = T;
-
-        _gpu_copy(const T& vec) : _dev_copy(pacxx::v2::get_executor().allocate<value_type>(vec.size())),
-                                  _count(vec.size()) {
-          _dev_copy.upload(vec.data(), vec.size());
-        }
-
-        ~_gpu_copy(){
-          _dev_copy.abandon();
-          __error("dead");
-        }
-
-        operator T() {
-          T ret(_count);
-          __warning("_gpu_copy collapsing");
-          _dev_copy.download(ret.data(), ret.size());
-
-          return ret;
-        }
-
-        auto begin() { return _dev_copy.get(); }
-
-        auto end() { return _dev_copy.get() + _count; }
-
-
-      private:
-        pacxx::v2::DeviceBuffer <value_type>& _dev_copy;
-        size_t _count;
-      };
-
-    }
-
     struct _copy {
       template<typename T>
       auto operator()(T& input) const {
-        static_assert(traits::is_vector<T>::value && "Only std::vector is currently supported!");
-        return range::gpu_vector(input);
+          static_assert(traits::is_vector<T>::value, "Only std::vector is currently supported!");
+          return range::gvector<T>(input);
       }
     };
 

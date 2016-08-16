@@ -10,6 +10,7 @@
 
 // operators
 #include <detail/operators/copy.h>
+#include <detail/operators/async.h>
 
 // ranges
 #include <detail/ranges/vector.h>

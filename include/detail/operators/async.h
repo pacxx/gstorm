@@ -11,15 +11,31 @@
 #include <future>
 #include <iostream>
 #include <detail/ranges/vector.h>
+#include <meta/tuple_helper.h>
 
 namespace gstorm {
   namespace gpu {
+
+    namespace meta {
+
+      template<typename T, typename A>
+      auto translate_memory(const std::vector<T, A>& data) {
+        return range::gvector<std::vector<T, A>>(data);
+      }
+
+      template<typename T>
+      const range::gvector<T>& translate_memory(const range::gvector<T>& data) {
+        return data;
+      }
+
+    }
+
     template<typename T>
     struct _async {
       using type_ = std::remove_reference_t<std::remove_cv_t<T>>;
       using value_type = decltype(*std::declval<type_>().begin());
 
-      _async(T&& view) : _view(view) {}
+      _async(T view) : _view(view) {}
 
       auto operator()() {
 
@@ -45,8 +61,20 @@ namespace gstorm {
     };
 
     struct _async_helper {
-      template<typename T>
-      auto operator()(T&& view) { return _async<T>(view); }
+      template<typename T, typename = std::enable_if_t<ranges::v3::is_view<T>::value>>
+      auto operator()(T&& view) const { return _async<T>(std::forward<T>(view)); }
+
+      template<typename F, typename... Ts, typename = std::enable_if_t<!ranges::v3::is_view<F>::value>>
+      auto operator()(F&& function, const Ts& ... args) const {
+
+        auto tpl = std::tuple<decltype(meta::translate_memory(args))...>(meta::translate_memory(args)...);
+
+        auto view = gstorm::meta::apply(function, tpl);
+        _async<decltype(view)> kernel(view);
+
+        auto future = kernel();
+        return future;
+      };
     };
 
     auto async = gstorm::static_const<_async_helper>();

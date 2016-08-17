@@ -58,7 +58,7 @@ namespace gstorm {
             *(out + id.x) = func(*(in + id.x));
 
           }, {{(distance + thread_count - 1) / thread_count},
-              {thread_count}}, pacxx::v2::make_callback(callback));
+              {thread_count}}, std::forward<CallbackFunc>(callback));
 
           kernel(in.begin(), out.begin(), distance, func);
       };

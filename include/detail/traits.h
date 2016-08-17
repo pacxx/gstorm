@@ -4,19 +4,12 @@
 
 #ifndef GSTORM_TRAITS_H_H
 #define GSTORM_TRAITS_H_H
+
+#include <detail/ranges/vector.h>
+
+
 namespace gstorm {
   namespace traits {
-    template<typename T>
-    struct range_forward_traits {
-      using base_type = T;
-
-      using size_type = typename T::size_type;
-      using value_type = typename T::value_type;
-      using reference = std::conditional_t<std::is_const<T>::value, const typename T::reference, typename T::reference>;
-      using const_reference = typename T::const_reference;
-      using difference_type = typename T::difference_type;
-    };
-
 
     template<class T>
     struct is_vector : std::false_type {
@@ -25,6 +18,15 @@ namespace gstorm {
     template<class T, class Alloc>
     struct is_vector<std::vector<T, Alloc>> : std::true_type {
     };
+
+    template<class T>
+    struct is_gvector : std::false_type {
+    };
+
+    template<class T>
+    struct is_gvector<range::gvector<T>> : std::true_type {
+    };
+
 
 
     template<template<typename...> class Template, typename T>

@@ -14,6 +14,20 @@
 #include <range/v3/view_facade.hpp>
 
 namespace gstorm {
+
+  namespace traits {
+    template<typename T>
+    struct range_forward_traits {
+      using base_type = T;
+
+      using size_type = typename T::size_type;
+      using value_type = typename T::value_type;
+      using reference = std::conditional_t<std::is_const<T>::value, const typename T::reference, typename T::reference>;
+      using const_reference = typename T::const_reference;
+      using difference_type = typename T::difference_type;
+    };
+  }
+
   namespace range {
 
     template<typename T>
@@ -130,24 +144,25 @@ namespace gstorm {
       gvector() : _buffer(nullptr), _size(0) {}
 
       gvector(size_t size) : _buffer(&pacxx::v2::get_executor().allocate<typename T::value_type>(size)),
-                             _size(size) {}
+                             _size(size) {
+//        __message("allocated ", (void*)_buffer);
+      }
 
-      gvector(T& vec) : gvector(vec.size()) {
+      gvector(const T& vec) : gvector(vec.size()) {
         _buffer->upload(vec.data(), vec.size());
       }
 
       ~gvector() {
+//        __message("destroyed ", (void*)_buffer);
         if (_buffer)
           _buffer->abandon();
       }
 
-      gvector(const gvector& other) : _buffer(other._buffer), _size(other._size) {
-        if (_buffer)
-          _buffer->mercy();
-      };
+      gvector(const gvector&) = delete;
 
       gvector(gvector&& other) {
         _buffer = other._buffer;
+        //     __message("moved ", (void*)_buffer);
         other._buffer = nullptr;
         _size = other._size;
         other._size = 0;

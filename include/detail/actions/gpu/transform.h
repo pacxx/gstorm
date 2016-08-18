@@ -18,51 +18,46 @@ namespace gstorm {
   namespace gpu {
     namespace algorithm {
 
+      template<typename InTy, typename OutTy, typename UnaryFunc>
+      struct transform_functor {
+        void operator()(InTy in,
+                        OutTy out,
+                        size_t distance,
+                        UnaryFunc func) const {
+          auto id = Thread::get().global;
+          if (static_cast<size_t>(id.x) >= distance) return;
+
+          *(out + id.x) = func(*(in + id.x));
+        }
+      };
+
       template<typename InRng, typename OutRng, typename UnaryFunc>
       auto transform(InRng&& in, OutRng& out, UnaryFunc&& func) {
         constexpr size_t thread_count = 128;
 
         auto distance = ranges::v3::distance(in);
 
-        auto kernel = pacxx::v2::kernel([](decltype(in.begin()) in,
-                                           decltype(out.begin()) out,
-                                           size_t distance,
-                                           UnaryFunc func) {
-          auto id = Thread::get().global;
-
-          if (static_cast<size_t>(id.x) >= distance) return;
-
-          *(out + id.x) = func(*(in + id.x));
-
-        }, {{(distance + thread_count - 1) / thread_count},
-            {thread_count}});
+        auto kernel = pacxx::v2::kernel(
+            transform_functor<decltype(in.begin()), decltype(out.begin()), UnaryFunc>(),
+            {{(distance + thread_count - 1) / thread_count},
+             {thread_count}});
 
         kernel(in.begin(), out.begin(), distance, func);
       };
 
-
       template<typename InRng, typename OutRng, typename UnaryFunc, typename CallbackFunc>
       auto transform(InRng&& in, OutRng& out, UnaryFunc&& func, CallbackFunc&& callback) {
-          constexpr size_t thread_count = 128;
+        constexpr size_t thread_count = 128;
 
-          auto distance = ranges::v3::distance(in);
+        auto distance = ranges::v3::distance(in);
 
-          auto kernel = pacxx::v2::kernel_with_cb([](decltype(in.begin()) in,
-                                                     decltype(out.begin()) out,
-                                                     size_t distance,
-                                                     UnaryFunc func) {
-            auto id = Thread::get().global;
+        auto kernel = pacxx::v2::kernel_with_cb(
+            transform_functor<decltype(in.begin()), decltype(out.begin()), UnaryFunc>(),
+            {{(distance + thread_count - 1) / thread_count},
+             {thread_count}}, std::forward<CallbackFunc>(callback));
 
-            if (static_cast<size_t>(id.x) >= distance) return;
-
-            *(out + id.x) = func(*(in + id.x));
-
-          }, {{(distance + thread_count - 1) / thread_count},
-              {thread_count}}, std::forward<CallbackFunc>(callback));
-
-          kernel(in.begin(), out.begin(), distance, func);
+        kernel(in.begin(), out.begin(), distance, func);
       };
-
     }
 
     namespace action {
@@ -71,12 +66,12 @@ namespace gstorm {
         _transform_action(T&& rng, F func) : _rng(std::forward<T>(rng)), _func(func) {}
 
         auto operator()() {
-            algorithm::transform(_rng, _rng, _func);
+          algorithm::transform(_rng, _rng, _func);
         }
 
         operator typename std::remove_reference_t<T>::source_type() {
-            operator()();
-            return _rng;
+          operator()();
+          return _rng;
         }
 
       private:
@@ -90,7 +85,7 @@ namespace gstorm {
 
         template<typename T>
         auto operator()(T&& rng) const {
-            return _transform_action<T, F>(std::forward<T>(rng), _func);
+          return _transform_action<T, F>(std::forward<T>(rng), _func);
         }
 
       private:
@@ -101,7 +96,7 @@ namespace gstorm {
       struct _transform {
         template<typename F>
         auto operator()(F func) const {
-            return _transform_action_helper<decltype(func)>(func);
+          return _transform_action_helper<decltype(func)>(func);
         }
       };
 
@@ -109,15 +104,15 @@ namespace gstorm {
 
       template<typename T, typename F>
       auto operator|(range::gvector<T>&& lhs, _transform_action_helper<F>&& rhs) {
-          return rhs(std::forward<decltype(lhs)>(lhs));
+        return rhs(std::forward<decltype(lhs)>(lhs));
       }
 
       template<typename Rng, typename F>
       auto operator|(Rng& lhs, _transform_action_helper<F>&& rhs) {
-          // evaluate explicitly here because _gpu_copy is destroyed before it collapses into its source type
-          auto gpu_copy = lhs | gpu::copy;
-          // auto trans =
-          return rhs(std::move(gpu_copy));;
+        // evaluate explicitly here because _gpu_copy is destroyed before it collapses into its source type
+        auto gpu_copy = lhs | gpu::copy;
+        // auto trans =
+        return rhs(std::move(gpu_copy));;
       };
 
     }

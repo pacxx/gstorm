@@ -18,13 +18,18 @@ namespace gstorm {
 
     namespace meta {
 
-      template<typename T, typename A>
-      auto translate_memory(const std::vector<T, A>& data) {
-        return range::gvector<std::vector<T, A>>(data);
+      template<typename T, std::enable_if_t<traits::is_vector<T>::value>* = nullptr>
+      auto translate_memory(const T& data) {
+        return range::gvector<T>(data);
       }
 
-      template<typename T>
-      const range::gvector<T>& translate_memory(const range::gvector<T>& data) {
+      template<typename T, std::enable_if_t<traits::is_gvector<T>::value>* = nullptr>
+      const auto& translate_memory(const T& data) {
+        return data;
+      }
+
+      template<typename T, std::enable_if_t<!traits::is_vector<T>::value && !traits::is_gvector<T>::value>* = nullptr>
+      const auto& translate_memory(const T& data) {
         return data;
       }
 

@@ -23,8 +23,8 @@ namespace gstorm {
     struct is_gvector : std::false_type {
     };
 
-    template<class T>
-    struct is_gvector<range::gvector<T>> : std::true_type {
+    template<template<typename> class T, typename U>
+    struct is_gvector<T<U>> : std::is_same<T<U>, range::gvector<U>> {
     };
 
 

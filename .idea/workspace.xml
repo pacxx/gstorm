@@ -12,11 +12,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="54f16c39-d1b2-4179-baba-466d34b4a33e" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/gstorm.iml" afterPath="$PROJECT_DIR$/.idea/gstorm.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/include/detail/actions/gpu/transform.h" afterPath="$PROJECT_DIR$/include/detail/actions/gpu/transform.h" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/include/detail/operators/async.h" afterPath="$PROJECT_DIR$/include/detail/operators/async.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/include/detail/ranges/vector.h" afterPath="$PROJECT_DIR$/include/detail/ranges/vector.h" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/include/detail/traits.h" afterPath="$PROJECT_DIR$/include/detail/traits.h" />
     </list>
     <ignored path="gstorm.iws" />
@@ -40,17 +38,18 @@
       <file leaf-file-name="transform.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/include/detail/actions/gpu/transform.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="612">
-              <caret line="60" column="67" selection-start-line="60" selection-start-column="67" selection-end-line="60" selection-end-column="67" />
+            <state relative-caret-position="900">
+              <caret line="50" column="0" selection-start-line="50" selection-start-column="0" selection-end-line="50" selection-end-column="0" />
               <folding>
-                <element signature="e#383#436#0" expanded="true" />
-                <element signature="e#1184#1260#0" expanded="true" />
-                <element signature="e#2156#2180#0" expanded="true" />
-                <element signature="e#2599#2611#0" expanded="true" />
-                <element signature="e#2727#2739#0" expanded="true" />
-                <element signature="e#2950#2962#0" expanded="true" />
-                <element signature="e#3164#3188#0" expanded="true" />
-                <element signature="e#3351#3377#0" expanded="true" />
+                <element signature="e#383#434#0" expanded="true" />
+                <element signature="e#809#862#0" expanded="true" />
+                <element signature="e#1330#1406#0" expanded="true" />
+                <element signature="e#1974#1998#0" expanded="true" />
+                <element signature="e#2411#2423#0" expanded="true" />
+                <element signature="e#2539#2551#0" expanded="true" />
+                <element signature="e#2760#2772#0" expanded="true" />
+                <element signature="e#2972#2996#0" expanded="true" />
+                <element signature="e#3157#3183#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -59,15 +58,16 @@
       <file leaf-file-name="async.h" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/include/detail/operators/async.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="288">
-              <caret line="16" column="17" selection-start-line="16" selection-start-column="17" selection-end-line="16" selection-end-column="17" />
+            <state relative-caret-position="432">
+              <caret line="34" column="6" selection-start-line="34" selection-start-column="6" selection-end-line="34" selection-end-column="6" />
               <folding>
-                <element signature="e#343#367#0" expanded="true" />
-                <element signature="e#508#520#0" expanded="true" />
-                <element signature="e#651#663#0" expanded="true" />
-                <element signature="e#1860#1932#0" expanded="true" />
-                <element signature="e#2031#2120#0" expanded="true" />
-                <element signature="e#2536#2551#0" expanded="true" />
+                <element signature="e#343#413#0" expanded="true" />
+                <element signature="e#522#593#0" expanded="true" />
+                <element signature="e#690#794#0" expanded="true" />
+                <element signature="e#902#914#0" expanded="true" />
+                <element signature="e#2111#2183#0" expanded="true" />
+                <element signature="e#2282#2371#0" expanded="true" />
+                <element signature="e#2788#2803#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -76,7 +76,7 @@
       <file leaf-file-name="tuple_helper.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/include/meta/tuple_helper.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="594">
+            <state relative-caret-position="720">
               <caret line="40" column="22" selection-start-line="40" selection-start-column="22" selection-end-line="40" selection-end-column="22" />
               <folding />
             </state>
@@ -86,13 +86,14 @@
       <file leaf-file-name="traits.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/include/detail/traits.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
-              <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+            <state relative-caret-position="36">
+              <caret line="26" column="43" selection-start-line="26" selection-start-column="43" selection-end-line="26" selection-end-column="43" />
               <folding>
                 <element signature="e#254#276#0" expanded="true" />
-                <element signature="e#432#441#0" expanded="true" />
-                <marker date="1471451505000" expanded="true" signature="147:1553" ph="{...}" />
-                <marker date="1471451505000" expanded="true" signature="168:345" ph="{...}" />
+                <element signature="e#432#473#0" expanded="true" />
+                <element signature="e#442#452#0" expanded="true" />
+                <marker date="1471511072000" expanded="true" signature="147:1595" ph="{...}" />
+                <marker date="1471511072000" expanded="true" signature="168:345" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -133,7 +134,7 @@
       <file leaf-file-name="vector.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/include/detail/ranges/vector.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1332">
+            <state relative-caret-position="864">
               <caret line="148" column="7" selection-start-line="148" selection-start-column="7" selection-end-line="148" selection-end-column="7" />
               <folding>
                 <element signature="e#0#2#0" expanded="false" />
@@ -167,9 +168,9 @@
         <option value="$PROJECT_DIR$/include/detail/views/materialize.h" />
         <option value="$PROJECT_DIR$/include/detail/operators/copy.h" />
         <option value="$PROJECT_DIR$/include/gstorm.h" />
+        <option value="$PROJECT_DIR$/include/detail/ranges/vector.h" />
         <option value="$PROJECT_DIR$/include/detail/traits.h" />
         <option value="$PROJECT_DIR$/include/detail/actions/gpu/transform.h" />
-        <option value="$PROJECT_DIR$/include/detail/ranges/vector.h" />
         <option value="$PROJECT_DIR$/include/detail/operators/async.h" />
       </list>
     </option>
@@ -580,7 +581,8 @@
       <workItem from="1471340304094" duration="3128000" />
       <workItem from="1471344093774" duration="20707000" />
       <workItem from="1470986141032" duration="6565000" />
-      <workItem from="1471424886858" duration="20515000" />
+      <workItem from="1471424886858" duration="20582000" />
+      <workItem from="1471505077708" duration="16382000" />
     </task>
     <task id="LOCAL-00001" summary="transform view has landed with implicit evaluation when used on a LHS of an asignment to an std::vector (other containers currently not supported)">
       <created>1470391733207</created>
@@ -610,17 +612,24 @@
       <option name="project" value="LOCAL" />
       <updated>1471386125351</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="async supports now the function style call as well as the pipelining syntax">
+      <created>1471460678641</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1471460678641</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="103491000" />
+    <option name="totallyTimeSpent" value="119940000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1920" height="1052" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.08519702" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.0857295" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32938644" sideWeight="0.5018431" order="8" side_tool="true" content_ui="tabs" />
@@ -657,7 +666,8 @@
     <MESSAGE value="scalar renamed to repeat to make it consistent with rangesV3" />
     <MESSAGE value="it works! finally" />
     <MESSAGE value="removed old code &#10;&#10;first version of async works. it uses the transform algorithm with an identity function to materialize a view into an gvector" />
-    <option name="LAST_COMMIT_MESSAGE" value="removed old code &#10;&#10;first version of async works. it uses the transform algorithm with an identity function to materialize a view into an gvector" />
+    <MESSAGE value="async supports now the function style call as well as the pipelining syntax" />
+    <option name="LAST_COMMIT_MESSAGE" value="async supports now the function style call as well as the pipelining syntax" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -703,9 +713,10 @@
           <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
           <folding>
             <element signature="e#254#276#0" expanded="true" />
-            <element signature="e#432#441#0" expanded="true" />
-            <marker date="1471451505000" expanded="true" signature="147:1553" ph="{...}" />
-            <marker date="1471451505000" expanded="true" signature="168:345" ph="{...}" />
+            <element signature="e#432#473#0" expanded="true" />
+            <element signature="e#442#452#0" expanded="true" />
+            <marker date="1471511072000" expanded="true" signature="147:1595" ph="{...}" />
+            <marker date="1471511072000" expanded="true" signature="168:345" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -858,9 +869,10 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#254#276#0" expanded="true" />
-            <element signature="e#432#441#0" expanded="true" />
-            <marker date="1471451505000" expanded="true" signature="147:1553" ph="{...}" />
-            <marker date="1471451505000" expanded="true" signature="168:345" ph="{...}" />
+            <element signature="e#432#473#0" expanded="true" />
+            <element signature="e#442#452#0" expanded="true" />
+            <marker date="1471511072000" expanded="true" signature="147:1595" ph="{...}" />
+            <marker date="1471511072000" expanded="true" signature="168:345" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -906,49 +918,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/include/detail/operators/copy.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="19" column="24" selection-start-line="19" selection-start-column="24" selection-end-line="19" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/include/meta/tuple_helper.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="594">
+        <state relative-caret-position="720">
           <caret line="40" column="22" selection-start-line="40" selection-start-column="22" selection-end-line="40" selection-end-column="22" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/include/detail/traits.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-          <folding>
-            <element signature="e#254#276#0" expanded="true" />
-            <element signature="e#432#441#0" expanded="true" />
-            <marker date="1471451505000" expanded="true" signature="147:1553" ph="{...}" />
-            <marker date="1471451505000" expanded="true" signature="168:345" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/include/detail/actions/gpu/transform.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="612">
-          <caret line="60" column="67" selection-start-line="60" selection-start-column="67" selection-end-line="60" selection-end-column="67" />
-          <folding>
-            <element signature="e#383#436#0" expanded="true" />
-            <element signature="e#1184#1260#0" expanded="true" />
-            <element signature="e#2156#2180#0" expanded="true" />
-            <element signature="e#2599#2611#0" expanded="true" />
-            <element signature="e#2727#2739#0" expanded="true" />
-            <element signature="e#2950#2962#0" expanded="true" />
-            <element signature="e#3164#3188#0" expanded="true" />
-            <element signature="e#3351#3377#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -962,17 +936,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tests/transform.cpp">
+    <entry file="file://$PROJECT_DIR$/include/detail/operators/copy.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="11" column="14" selection-start-line="11" selection-start-column="14" selection-end-line="11" selection-end-column="14" />
+        <state relative-caret-position="342">
+          <caret line="19" column="24" selection-start-line="19" selection-start-column="24" selection-end-line="19" selection-end-column="24" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/include/detail/ranges/vector.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1332">
+        <state relative-caret-position="864">
           <caret line="148" column="7" selection-start-line="148" selection-start-column="7" selection-end-line="148" selection-end-column="7" />
           <folding>
             <element signature="e#0#2#0" expanded="false" />
@@ -983,17 +957,58 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/include/detail/traits.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36">
+          <caret line="26" column="43" selection-start-line="26" selection-start-column="43" selection-end-line="26" selection-end-column="43" />
+          <folding>
+            <element signature="e#254#276#0" expanded="true" />
+            <element signature="e#432#473#0" expanded="true" />
+            <element signature="e#442#452#0" expanded="true" />
+            <marker date="1471511072000" expanded="true" signature="147:1595" ph="{...}" />
+            <marker date="1471511072000" expanded="true" signature="168:345" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/transform.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="11" column="14" selection-start-line="11" selection-start-column="14" selection-end-line="11" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/detail/actions/gpu/transform.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="900">
+          <caret line="50" column="0" selection-start-line="50" selection-start-column="0" selection-end-line="50" selection-end-column="0" />
+          <folding>
+            <element signature="e#383#434#0" expanded="true" />
+            <element signature="e#809#862#0" expanded="true" />
+            <element signature="e#1330#1406#0" expanded="true" />
+            <element signature="e#1974#1998#0" expanded="true" />
+            <element signature="e#2411#2423#0" expanded="true" />
+            <element signature="e#2539#2551#0" expanded="true" />
+            <element signature="e#2760#2772#0" expanded="true" />
+            <element signature="e#2972#2996#0" expanded="true" />
+            <element signature="e#3157#3183#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/include/detail/operators/async.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
-          <caret line="16" column="17" selection-start-line="16" selection-start-column="17" selection-end-line="16" selection-end-column="17" />
+        <state relative-caret-position="432">
+          <caret line="34" column="6" selection-start-line="34" selection-start-column="6" selection-end-line="34" selection-end-column="6" />
           <folding>
-            <element signature="e#343#367#0" expanded="true" />
-            <element signature="e#508#520#0" expanded="true" />
-            <element signature="e#651#663#0" expanded="true" />
-            <element signature="e#1860#1932#0" expanded="true" />
-            <element signature="e#2031#2120#0" expanded="true" />
-            <element signature="e#2536#2551#0" expanded="true" />
+            <element signature="e#343#413#0" expanded="true" />
+            <element signature="e#522#593#0" expanded="true" />
+            <element signature="e#690#794#0" expanded="true" />
+            <element signature="e#902#914#0" expanded="true" />
+            <element signature="e#2111#2183#0" expanded="true" />
+            <element signature="e#2282#2371#0" expanded="true" />
+            <element signature="e#2788#2803#0" expanded="true" />
           </folding>
         </state>
       </provider>

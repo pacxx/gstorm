@@ -2,8 +2,7 @@
 // Created by mhaidl on 05/07/16.
 //
 
-#ifndef GSTORM_VECTOR_GPU_H
-#define GSTORM_VECTOR_GPU_H
+#pragma once
 
 #include <tuple>
 #include <iterator>
@@ -197,4 +196,3 @@ namespace gstorm {
     }
   }
 }
-#endif //GSTORM_VECTOR_GPU_H

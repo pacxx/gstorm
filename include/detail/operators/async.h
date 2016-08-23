@@ -2,8 +2,7 @@
 // Created by mhaidl on 16/08/16.
 //
 
-#ifndef GSTORM_ASYNC_H
-#define GSTORM_ASYNC_H
+#pragma once
 
 #include <meta/static_const.h>
 #include <range/v3/all.hpp>
@@ -11,6 +10,7 @@
 #include <future>
 #include <iostream>
 #include <detail/ranges/vector.h>
+#include <detail/algorithms/transform.h>
 #include <meta/tuple_helper.h>
 
 namespace gstorm {
@@ -91,5 +91,3 @@ namespace gstorm {
 
   }
 }
-
-#endif //GSTORM_ASYNC_H

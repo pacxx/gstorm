@@ -2,9 +2,7 @@
 // Created by mhaidl on 05/07/16.
 //
 
-#ifndef GSTORM_TUPLE_HELPER_H
-#define GSTORM_TUPLE_HELPER_H
-
+#pragma once
 #include <utility>
 #include <tuple>
 
@@ -63,4 +61,3 @@ namespace gstorm {
 /////////////////////////////////////////////////////////////////////////////
   }
 }
-#endif //GSTORM_TUPLE_HELPER_H

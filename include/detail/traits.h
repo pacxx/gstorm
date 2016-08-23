@@ -2,8 +2,7 @@
 // Created by mhaidl on 05/07/16.
 //
 
-#ifndef GSTORM_TRAITS_H_H
-#define GSTORM_TRAITS_H_H
+#pragma once
 
 #include <detail/ranges/vector.h>
 
@@ -68,4 +67,3 @@ namespace gstorm {
     };
   }
 }
-#endif //GSTORM_TRAITS_H_H

@@ -2,8 +2,7 @@
 // Created by mhaidl on 09/08/16.
 //
 
-#ifndef GSTORM_COPY_H
-#define GSTORM_COPY_H
+#pragma once
 
 #include <detail/traits.h>
 #include <meta/static_const.h>
@@ -32,5 +31,3 @@ namespace gstorm {
 
   }
 }
-
-#endif //GSTORM_COPY_H

@@ -2,8 +2,7 @@
 // Created by mhaidl on 05/07/16.
 //
 
-#ifndef GSTORM_STATIC_CONST_H
-#define GSTORM_STATIC_CONST_H
+#pragma once
 
 #include <utility>
 
@@ -24,4 +23,3 @@ namespace gstorm {
   template<typename T>
   constexpr T static_const<T>::value;
 }
-#endif //GSTORM_STATIC_CONST_H

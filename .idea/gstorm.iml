@@ -7,12 +7,11 @@
       <sourceFolder url="file://$MODULE_DIR$/include/meta/tuple_helper.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/gstorm.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/detail/traits.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/include/detail/views/transform.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/include/detail/views/repeat.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/include/detail/views/zip.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/detail/operators/async.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/detail/operators/copy.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/include/detail/actions/gpu/transform.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/detail/actions/transform.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/detail/algorithms/reduce.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/detail/algorithms/transform.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/detail/ranges/vector.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
     </content>
@@ -20,16 +19,24 @@
     <orderEntry type="module-library">
       <library name="Header Search Paths">
         <CLASSES>
-          <root url="file:///usr/lib/gcc/x86_64-pc-linux-gnu/6.1.1/include" />
-          <root url="file:///usr/lib/gcc/x86_64-pc-linux-gnu/6.1.1/include-fixed" />
           <root url="file:///usr/include" />
           <root url="file:///usr/local/include" />
+          <root url="file:///usr/local/cuda/include" />
+          <root url="file://$USER_HOME$/code/range-v3/include" />
+          <root url="file://$MODULE_DIR$/../pacxx_v2/include" />
+          <root url="file://$USER_HOME$/local/kronos" />
+          <root url="file://$USER_HOME$/local/lib/clang/3.8.0/include" />
+          <root url="file://$USER_HOME$/local/include/c++/v1" />
         </CLASSES>
         <SOURCES>
-          <root url="file:///usr/lib/gcc/x86_64-pc-linux-gnu/6.1.1/include" />
-          <root url="file:///usr/lib/gcc/x86_64-pc-linux-gnu/6.1.1/include-fixed" />
           <root url="file:///usr/include" />
           <root url="file:///usr/local/include" />
+          <root url="file:///usr/local/cuda/include" />
+          <root url="file://$USER_HOME$/code/range-v3/include" />
+          <root url="file://$MODULE_DIR$/../pacxx_v2/include" />
+          <root url="file://$USER_HOME$/local/kronos" />
+          <root url="file://$USER_HOME$/local/lib/clang/3.8.0/include" />
+          <root url="file://$USER_HOME$/local/include/c++/v1" />
         </SOURCES>
       </library>
     </orderEntry>

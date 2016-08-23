@@ -9,85 +9,68 @@
 #include <PACXX.h>
 #include <detail/ranges/vector.h>
 
+#define REDUCE_THREAD_N 128
+#define REDUCE_BLOCK_N 130
+
 namespace gstorm {
   namespace gpu {
     namespace algorithm {
       template<typename InTy, typename OutTy, typename BinaryFunc>
       struct reduce_functor {
-        using value_type = decltype(*std::declval<InTy>());
+        using value_type = std::remove_reference_t<decltype(*std::declval<InTy>())>;
       private:
 
-        value_type gather(InTy it, size_t distance, BinaryFunc& func) const {
-          const size_t stride = 64 * 128;
-          value_type mine = *(it + Thread::get().global.x);
-
-          for (size_t i = Thread::get().global.x + stride; i < distance; i += stride)
-            mine = func(mine, *(it + i));
-
-          return mine;
-        }
-
-
-        void reduce(value_type /*__attribute__((address_space(3)))*/* sdata, BinaryFunc& func) const {
-          auto localId = Thread::get().index.x;
-          for (size_t i = Block::get().range.x / 2; i > 32; i >>= 1) {
-            if (localId < i)
-              sdata[localId] = func(sdata[localId], sdata[localId + i]);
-
-            Block::get().synchronize();
-          }
-        }
-
-        void blockreduce(value_type /*__attribute__((address_space(3)))*/* sdata, OutTy out, BinaryFunc& func) const {
-          auto localId = Thread::get().index.x;
-          if (localId < 32) {
-            sdata[localId] = func(sdata[localId], sdata[localId + 32]);
-            Block::get().synchronize();
-            sdata[localId] = func(sdata[localId], sdata[localId + 16]);
-            Block::get().synchronize();
-            sdata[localId] = func(sdata[localId], sdata[localId + 8]);
-            Block::get().synchronize();
-            sdata[localId] = func(sdata[localId], sdata[localId + 4]);
-            Block::get().synchronize();
-            sdata[localId] = func(sdata[localId], sdata[localId + 2]);
-            Block::get().synchronize();
-            sdata[localId] = func(sdata[localId], sdata[localId + 1]);
-            Block::get().synchronize();
-          }
-
-          if (localId == 0)
-            *out = sdata[0];
-        }
-
-
       public:
-        void operator()(InTy in, OutTy out, size_t distance, BinaryFunc func, value_type neutral) const {
+        void operator()(InTy in, OutTy out, size_t n, BinaryFunc func, value_type init) const {
 
-          auto id = Thread::get();
+      [[shared]] value_type sdata[REDUCE_THREAD_N]; 
 
-          [[shared]] value_type sdata[128];
-          sdata[id.index.x] = neutral;
-          if (static_cast<size_t>(id.global.x) >= distance) return;
-
-          sdata[id.index.x] = gather(in, distance, func);
-
-          Block::get().synchronize();
-
-          reduce(sdata, func);
-
-          blockreduce(sdata, out + Block::get().index.x, func);
+      volatile value_type *sm = &sdata[0];
+  
+      auto block = Block::get();
+      auto tid = Thread::get().index.x;
+      auto nIsPow2 = (n & (n - 1)) == 0;
+  
+      value_type sum = init;
+      auto gridSize = REDUCE_THREAD_N * 2 * Grid::get().range.x;
+      auto i = block.index.x * REDUCE_THREAD_N * 2 + tid;
+      while (i < n) {
+        sum = func(sum, *(in + i));
+        
+        if (nIsPow2 || i + REDUCE_THREAD_N < n)
+          sum = func(sum, *(in + i + REDUCE_THREAD_N));
+        
+        i += gridSize;
+      }
+  
+      sm[tid] = sum;
+      block.synchronize();
+  
+        if (tid < 64)
+          sm[tid] = func(sm[tid], sm[tid + 64]);
+        block.synchronize();
+      if (tid < 32) {
+          sm[tid] = func(sm[tid], sm[tid + 32]);
+          sm[tid] = func(sm[tid], sm[tid + 16]);
+          sm[tid] = func(sm[tid], sm[tid + 8]);
+          sm[tid] = func(sm[tid], sm[tid + 4]);
+          sm[tid] = func(sm[tid], sm[tid + 2]);
+          sm[tid] = func(sm[tid], sm[tid + 1]);
+      }
+      if (tid == 0)
+        *(out + block.index.x) = sm[tid];
         }
       };
 
       template<typename InRng, typename BinaryFunc>
-      auto reduce(InRng&& in, decltype(*in.begin()) neutral, BinaryFunc&& func) {
-        constexpr size_t thread_count = 128;
-        constexpr size_t block_count = 64;
+      auto reduce(InRng&& in, std::remove_reference_t<decltype(*in.begin())> init, BinaryFunc&& func) {
+        constexpr size_t thread_count = REDUCE_THREAD_N;
+        constexpr size_t block_count = REDUCE_BLOCK_N;
 
-        using value_type = decltype(*in.begin());
+        using value_type = std::remove_reference_t< decltype(*in.begin())>;
 
         auto distance = ranges::v3::distance(in);
-        std::vector<value_type> result(block_count, neutral);
+        std::vector<value_type> result(block_count, init);
         range::gvector<std::vector<value_type>> out(result);
 
         auto kernel = pacxx::v2::kernel(
@@ -95,11 +78,11 @@ namespace gstorm {
             {{block_count},
              {thread_count}});
 
-        kernel(in.begin(), out.begin(), distance, func, neutral);
+        kernel(in.begin(), out.begin(), distance, func, init);
 
         result = out;
 
-        return std::accumulate(result.begin(), result.end(), neutral, func);
+        return std::accumulate(result.begin(), result.end(), init, func);
 
       };
     }

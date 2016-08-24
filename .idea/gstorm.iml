@@ -10,8 +10,8 @@
       <sourceFolder url="file://$MODULE_DIR$/include/detail/operators/async.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/detail/operators/copy.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/detail/actions/transform.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/include/detail/algorithms/reduce.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/detail/algorithms/transform.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/detail/algorithms/reduce.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/detail/ranges/vector.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
     </content>

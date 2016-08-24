@@ -19,66 +19,93 @@ namespace gstorm {
       struct reduce_functor {
         using value_type = std::remove_reference_t<decltype(*std::declval<InTy>())>;
       private:
-
+        BinaryFunc func;
       public:
-        void operator()(InTy in, OutTy out, size_t n, BinaryFunc func, value_type init) const {
 
-      [[shared]] value_type sdata[REDUCE_THREAD_N]; 
+        reduce_functor(BinaryFunc&& f) : func(f) {}
 
-      volatile value_type *sm = &sdata[0];
-  
-      auto block = Block::get();
-      auto tid = Thread::get().index.x;
-      auto nIsPow2 = (n & (n - 1)) == 0;
-  
-      value_type sum = init;
-      auto gridSize = REDUCE_THREAD_N * 2 * Grid::get().range.x;
-      auto i = block.index.x * REDUCE_THREAD_N * 2 + tid;
-      while (i < n) {
-        sum = func(sum, *(in + i));
-        
-        if (nIsPow2 || i + REDUCE_THREAD_N < n)
-          sum = func(sum, *(in + i + REDUCE_THREAD_N));
-        
-        i += gridSize;
-      }
-  
-      sm[tid] = sum;
-      block.synchronize();
-  
-        if (tid < 64)
-          sm[tid] = func(sm[tid], sm[tid + 64]);
-        block.synchronize();
-      if (tid < 32) {
-          sm[tid] = func(sm[tid], sm[tid + 32]);
-          sm[tid] = func(sm[tid], sm[tid + 16]);
-          sm[tid] = func(sm[tid], sm[tid + 8]);
-          sm[tid] = func(sm[tid], sm[tid + 4]);
-          sm[tid] = func(sm[tid], sm[tid + 2]);
-          sm[tid] = func(sm[tid], sm[tid + 1]);
-      }
-      if (tid == 0)
-        *(out + block.index.x) = sm[tid];
+        void operator()(InTy in, OutTy out, size_t distance, value_type init, size_t ept) const {
+
+          [[shared]] value_type sdata[REDUCE_THREAD_N];
+
+
+          auto block = Block::get();
+          auto tid = Thread::get().index.x;
+          auto n = pacxx::v2::_stage([&] { return distance; });
+          auto nIsPow2 = (n & (n - 1)) == 0;
+
+          auto elements_per_thread = pacxx::v2::_stage(
+              [&] { return ept / 2; }); // n / (Grid::get().range.x * REDUCE_THREAD_N) / 2;
+
+          //   value_type lmem[elements_per_thread] ;
+          //   int x = 0;
+          value_type sum = init;
+          auto gridSize = REDUCE_THREAD_N * 2 * Grid::get().range.x;
+          auto i = block.index.x * REDUCE_THREAD_N * 2 + tid;
+          for (int x = 0; x < elements_per_thread; ++x) {
+            sum = func(sum, *(in + i));
+
+            // if (nIsPow2 || i + REDUCE_THREAD_N < n)
+            sum = func(sum, *(in + i + REDUCE_THREAD_N));
+
+            i += gridSize;
+
+          }
+          if (!nIsPow2)
+            while (i < n) {
+              sum = func(sum, *(in + i));
+
+              if (nIsPow2 || i + REDUCE_THREAD_N < n)
+                sum = func(sum, *(in + i + REDUCE_THREAD_N));
+
+              i += gridSize;
+
+            }
+
+          sdata[tid] = sum;
+          block.synchronize();
+
+          if (tid < 64)
+            sdata[tid] = func(sdata[tid], sdata[tid + 64]);
+          block.synchronize();
+          if (tid < 32) {
+            volatile value_type* sm = &sdata[0];
+            sm[tid] = func(sm[tid], sm[tid + 32]);
+            sm[tid] = func(sm[tid], sm[tid + 16]);
+            sm[tid] = func(sm[tid], sm[tid + 8]);
+            sm[tid] = func(sm[tid], sm[tid + 4]);
+            sm[tid] = func(sm[tid], sm[tid + 2]);
+            sm[tid] = func(sm[tid], sm[tid + 1]);
+          }
+          if (tid == 0)
+            *(out + block.index.x) = sdata[tid];
         }
       };
 
       template<typename InRng, typename BinaryFunc>
       auto reduce(InRng&& in, std::remove_reference_t<decltype(*in.begin())> init, BinaryFunc&& func) {
+        size_t distance = ranges::v3::distance(in);
         constexpr size_t thread_count = REDUCE_THREAD_N;
-        constexpr size_t block_count = REDUCE_BLOCK_N;
+        //size_t block_count = std::min((distance + 127 - 1) / (thread_count * 8), static_cast<size_t>(REDUCE_BLOCK_N));
+        size_t ept = 1;
+        do {
+          ept *= 2;
+        }
+        while (distance / (thread_count * ept) > 130);
+
+        __error(ept);
+        size_t block_count = std::max(distance / (thread_count * ept), 1ul);
 
         using value_type = std::remove_reference_t< decltype(*in.begin())>;
-
-        auto distance = ranges::v3::distance(in);
         std::vector<value_type> result(block_count, init);
         range::gvector<std::vector<value_type>> out(result);
 
         auto kernel = pacxx::v2::kernel(
-            reduce_functor<decltype(in.begin()), decltype(out.begin()), BinaryFunc>(),
+            reduce_functor<decltype(in.begin()), decltype(out.begin()), BinaryFunc>(std::forward<BinaryFunc>(func)),
             {{block_count},
              {thread_count}});
 
-        kernel(in.begin(), out.begin(), distance, func, init);
+        kernel(in.begin(), out.begin(), distance, init, ept);
 
         result = out;
 

@@ -82,11 +82,28 @@
       <file leaf-file-name="reduce.h" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/include/detail/algorithms/reduce.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="76">
-              <caret line="58" column="32" selection-start-line="58" selection-start-column="32" selection-end-line="58" selection-end-column="32" />
+            <state relative-caret-position="490">
+              <caret line="111" column="39" selection-start-line="111" selection-start-column="39" selection-end-line="111" selection-end-column="39" />
               <folding>
                 <element signature="e#55#73#0" expanded="true" />
-                <element signature="e#291#343#0" expanded="true" />
+                <element signature="e#265#299#0" expanded="true" />
+                <element signature="e#377#389#0" expanded="true" />
+                <element signature="e#553#573#0" expanded="true" />
+                <element signature="e#651#663#0" expanded="true" />
+                <element signature="e#753#787#0" expanded="true" />
+                <element signature="e#933#985#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="vector.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/include/detail/ranges/vector.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="594">
+              <caret line="137" column="38" selection-start-line="137" selection-start-column="38" selection-end-line="137" selection-end-column="38" />
+              <folding>
+                <element signature="e#0#2#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -173,7 +190,6 @@
         <option value="$PROJECT_DIR$/include/detail/actions/gpu/transform.h" />
         <option value="$PROJECT_DIR$/include/detail/algorithms/transform.h" />
         <option value="$PROJECT_DIR$/include/detail/operators/copy.h" />
-        <option value="$PROJECT_DIR$/include/detail/ranges/vector.h" />
         <option value="$PROJECT_DIR$/include/detail/views/repeat.h" />
         <option value="$PROJECT_DIR$/include/detail/traits.h" />
         <option value="$PROJECT_DIR$/include/meta/static_const.h" />
@@ -183,6 +199,7 @@
         <option value="$PROJECT_DIR$/include/detail/actions/transform.h" />
         <option value="$PROJECT_DIR$/include/detail/algorithms/reduce.h.h" />
         <option value="$PROJECT_DIR$/include/gstorm.h" />
+        <option value="$PROJECT_DIR$/include/detail/ranges/vector.h" />
         <option value="$PROJECT_DIR$/include/detail/algorithms/reduce.h" />
       </list>
     </option>
@@ -613,7 +630,7 @@
       <workItem from="1471505077708" duration="16624000" />
       <workItem from="1471954044407" duration="11928000" />
       <workItem from="1472022425224" duration="11568000" />
-      <workItem from="1472110151767" duration="6091000" />
+      <workItem from="1472110151767" duration="21976000" />
     </task>
     <task id="LOCAL-00001" summary="transform view has landed with implicit evaluation when used on a LHS of an asignment to an std::vector (other containers currently not supported)">
       <created>1470391733207</created>
@@ -678,11 +695,18 @@
       <option name="project" value="LOCAL" />
       <updated>1472119714683</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="made reduction safe for input sizes &lt; 128">
+      <created>1472120740436</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1472120740436</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="149769000" />
+    <option name="totallyTimeSpent" value="165654000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1920" height="1052" extended-state="6" />
@@ -730,7 +754,8 @@
     <MESSAGE value="restructured the library. the reduce algorithm has landed!" />
     <MESSAGE value="reduction is now (using msp) slightly faster than thrust" />
     <MESSAGE value="reduction is now (using msp) slightly faster than thrust for all input sizes until aprox.  2^27" />
-    <option name="LAST_COMMIT_MESSAGE" value="reduction is now (using msp) slightly faster than thrust for all input sizes until aprox.  2^27" />
+    <MESSAGE value="made reduction safe for input sizes &lt; 128" />
+    <option name="LAST_COMMIT_MESSAGE" value="made reduction safe for input sizes &lt; 128" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -753,6 +778,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="594">
           <caret line="33" column="30" selection-start-line="33" selection-start-column="30" selection-end-line="33" selection-end-column="30" />
+          <folding>
+            <marker date="1471957169000" expanded="true" signature="203:603" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -769,6 +797,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2538">
           <caret line="141" column="28" selection-start-line="141" selection-start-column="28" selection-end-line="141" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#2#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -786,6 +817,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1471957169000" expanded="true" signature="203:603" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -802,6 +836,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2538">
           <caret line="141" column="28" selection-start-line="141" selection-start-column="28" selection-end-line="141" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#2#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -830,6 +867,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2214">
           <caret line="123" column="27" selection-start-line="123" selection-start-column="27" selection-end-line="123" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#2#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -866,17 +906,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="576">
           <caret line="32" column="1" selection-start-line="32" selection-start-column="1" selection-end-line="32" selection-end-column="1" />
+          <folding>
+            <marker date="1471957169000" expanded="true" signature="203:603" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/include/detail/views/repeat.h" />
-    <entry file="file://$PROJECT_DIR$/include/detail/ranges/vector.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="792">
-          <caret line="197" column="1" selection-start-line="197" selection-start-column="1" selection-end-line="197" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/include/meta/static_const.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="450">
@@ -893,7 +929,12 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#55#73#0" expanded="true" />
-            <element signature="e#291#343#0" expanded="true" />
+            <element signature="e#265#299#0" expanded="true" />
+            <element signature="e#377#389#0" expanded="true" />
+            <element signature="e#553#573#0" expanded="true" />
+            <element signature="e#651#663#0" expanded="true" />
+            <element signature="e#753#787#0" expanded="true" />
+            <element signature="e#933#985#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -983,13 +1024,28 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/include/detail/ranges/vector.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="594">
+          <caret line="137" column="38" selection-start-line="137" selection-start-column="38" selection-end-line="137" selection-end-column="38" />
+          <folding>
+            <element signature="e#0#2#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/include/detail/algorithms/reduce.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="76">
-          <caret line="58" column="32" selection-start-line="58" selection-start-column="32" selection-end-line="58" selection-end-column="32" />
+        <state relative-caret-position="490">
+          <caret line="111" column="39" selection-start-line="111" selection-start-column="39" selection-end-line="111" selection-end-column="39" />
           <folding>
             <element signature="e#55#73#0" expanded="true" />
-            <element signature="e#291#343#0" expanded="true" />
+            <element signature="e#265#299#0" expanded="true" />
+            <element signature="e#377#389#0" expanded="true" />
+            <element signature="e#553#573#0" expanded="true" />
+            <element signature="e#651#663#0" expanded="true" />
+            <element signature="e#753#787#0" expanded="true" />
+            <element signature="e#933#985#0" expanded="true" />
           </folding>
         </state>
       </provider>

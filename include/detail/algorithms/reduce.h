@@ -13,6 +13,38 @@
 #define REDUCE_BLOCK_N 130
 
 namespace gstorm {
+
+  namespace meta {
+    template<int First, int Last, typename Fn>
+    struct _static_for {
+      _static_for(Fn f) : func(f) {}
+
+      template<typename T>
+      auto operator()(T init, T y) const {
+        return _static_for<First + 1, Last, Fn>(func)(init, func(init, y));
+      }
+
+      Fn func;
+    };
+
+    template<int N, typename Fn>
+    struct _static_for<N, N, Fn> {
+      _static_for(Fn f) {}
+
+      template<typename T>
+      auto operator()(T init, T y) const {
+        return y;
+      }
+    };
+
+    template<int First, int Last, typename Fn>
+    auto static_for(Fn f) {
+      return _static_for<First, Last, Fn>(f);
+    }
+
+  }
+
+
   namespace gpu {
     namespace algorithm {
       template<typename InTy, typename OutTy, typename BinaryFunc>
@@ -28,23 +60,27 @@ namespace gstorm {
 
           [[shared]] value_type sdata[REDUCE_THREAD_N];
 
-
           auto block = Block::get();
-          auto tid = Thread::get().index.x;
+          size_t tid = Thread::get().index.x;
           auto n = pacxx::v2::_stage([&] { return distance; });
-          auto nIsPow2 = (n & (n - 1)) == 0;
+          auto IsPow2 = (n & (n - 1)) == 0;
 
-          auto elements_per_thread = pacxx::v2::_stage([&] { return ept; });
+          int elements_per_thread = pacxx::v2::_stage([&] { return ept; });
 
           value_type sum = init;
-          auto gridSize = REDUCE_THREAD_N * Grid::get().range.x;
-          auto i = Thread::get().global.x;
+
+          size_t gridSize = REDUCE_THREAD_N * Grid::get().range.x;
+          size_t i = Thread::get().global.x;
+
           for (int x = 0; x < elements_per_thread; ++x) {
             sum = func(sum, *(in + i));
             i += gridSize;
           }
-          if (!nIsPow2 && i < n) {
+
+          if (!IsPow2)
+            while (i < n) {
               sum = func(sum, *(in + i));
+              i += gridSize;
             }
 
           sdata[tid] = sum;
@@ -63,27 +99,27 @@ namespace gstorm {
             sm[tid] = func(sm[tid], sm[tid + 1]);
           }
           if (tid == 0)
-            *(out + block.index.x) = sdata[tid];
+            *(out + static_cast<size_t>(block.index.x)) = sdata[tid];
         }
       };
+
 
       template<typename InRng, typename BinaryFunc>
       auto reduce(InRng&& in, std::remove_reference_t<decltype(*in.begin())> init, BinaryFunc&& func) {
         size_t distance = ranges::v3::distance(in);
         size_t thread_count = std::min(REDUCE_THREAD_N, distance);
         size_t ept = 1;
-        if (distance > thread_count) {
+        if (distance > thread_count * 2) {
           do {
             ept *= 2;
           }
           while (distance / (thread_count * ept) > 130);
         }
 
-
         __error(ept);
         size_t block_count = std::max(distance / (thread_count * ept), 1ul);
 
-        using value_type = std::remove_reference_t< decltype(*in.begin())>;
+        using value_type = std::remove_reference_t<decltype(*in.begin())>;
         std::vector<value_type> result(block_count, init);
         range::gvector<std::vector<value_type>> out(result);
 
@@ -93,6 +129,7 @@ namespace gstorm {
              {thread_count}});
 
         kernel(in.begin(), out.begin(), distance, init, ept);
+
 
         result = out;
 

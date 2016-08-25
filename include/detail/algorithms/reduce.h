@@ -34,32 +34,17 @@ namespace gstorm {
           auto n = pacxx::v2::_stage([&] { return distance; });
           auto nIsPow2 = (n & (n - 1)) == 0;
 
-          auto elements_per_thread = pacxx::v2::_stage(
-              [&] { return ept / 2; }); // n / (Grid::get().range.x * REDUCE_THREAD_N) / 2;
+          auto elements_per_thread = pacxx::v2::_stage([&] { return ept; });
 
-          //   value_type lmem[elements_per_thread] ;
-          //   int x = 0;
           value_type sum = init;
-          auto gridSize = REDUCE_THREAD_N * 2 * Grid::get().range.x;
-          auto i = block.index.x * REDUCE_THREAD_N * 2 + tid;
+          auto gridSize = REDUCE_THREAD_N * Grid::get().range.x;
+          auto i = Thread::get().global.x;
           for (int x = 0; x < elements_per_thread; ++x) {
             sum = func(sum, *(in + i));
-
-            // if (nIsPow2 || i + REDUCE_THREAD_N < n)
-            sum = func(sum, *(in + i + REDUCE_THREAD_N));
-
             i += gridSize;
-
           }
-          if (!nIsPow2)
-            while (i < n) {
+          if (!nIsPow2 && i < n) {
               sum = func(sum, *(in + i));
-
-              if (nIsPow2 || i + REDUCE_THREAD_N < n)
-                sum = func(sum, *(in + i + REDUCE_THREAD_N));
-
-              i += gridSize;
-
             }
 
           sdata[tid] = sum;

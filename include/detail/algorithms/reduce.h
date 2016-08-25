@@ -9,7 +9,7 @@
 #include <PACXX.h>
 #include <detail/ranges/vector.h>
 
-#define REDUCE_THREAD_N 128
+#define REDUCE_THREAD_N 128ul
 #define REDUCE_BLOCK_N 130
 
 namespace gstorm {
@@ -70,13 +70,15 @@ namespace gstorm {
       template<typename InRng, typename BinaryFunc>
       auto reduce(InRng&& in, std::remove_reference_t<decltype(*in.begin())> init, BinaryFunc&& func) {
         size_t distance = ranges::v3::distance(in);
-        constexpr size_t thread_count = REDUCE_THREAD_N;
-        //size_t block_count = std::min((distance + 127 - 1) / (thread_count * 8), static_cast<size_t>(REDUCE_BLOCK_N));
+        size_t thread_count = std::min(REDUCE_THREAD_N, distance);
         size_t ept = 1;
-        do {
-          ept *= 2;
+        if (distance > thread_count) {
+          do {
+            ept *= 2;
+          }
+          while (distance / (thread_count * ept) > 130);
         }
-        while (distance / (thread_count * ept) > 130);
+
 
         __error(ept);
         size_t block_count = std::max(distance / (thread_count * ept), 1ul);
@@ -95,7 +97,6 @@ namespace gstorm {
         result = out;
 
         return std::accumulate(result.begin(), result.end(), init, func);
-
       };
     }
   }

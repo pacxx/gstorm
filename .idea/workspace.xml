@@ -82,11 +82,11 @@
       <file leaf-file-name="reduce.h" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/include/detail/algorithms/reduce.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="67" column="8" selection-start-line="67" selection-start-column="8" selection-end-line="67" selection-end-column="8" />
+            <state relative-caret-position="76">
+              <caret line="58" column="32" selection-start-line="58" selection-start-column="32" selection-end-line="58" selection-end-column="32" />
               <folding>
                 <element signature="e#55#73#0" expanded="true" />
-                <element signature="e#289#341#0" expanded="true" />
+                <element signature="e#291#343#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -613,7 +613,7 @@
       <workItem from="1471505077708" duration="16624000" />
       <workItem from="1471954044407" duration="11928000" />
       <workItem from="1472022425224" duration="11568000" />
-      <workItem from="1472110151767" duration="5037000" />
+      <workItem from="1472110151767" duration="6091000" />
     </task>
     <task id="LOCAL-00001" summary="transform view has landed with implicit evaluation when used on a LHS of an asignment to an std::vector (other containers currently not supported)">
       <created>1470391733207</created>
@@ -671,11 +671,18 @@
       <option name="project" value="LOCAL" />
       <updated>1472044990329</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="reduction is now (using msp) slightly faster than thrust for all input sizes until aprox.  2^27">
+      <created>1472119714683</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1472119714683</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="148715000" />
+    <option name="totallyTimeSpent" value="149769000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1920" height="1052" extended-state="6" />
@@ -722,7 +729,8 @@
     <MESSAGE value="async now takes all kind of input stuff" />
     <MESSAGE value="restructured the library. the reduce algorithm has landed!" />
     <MESSAGE value="reduction is now (using msp) slightly faster than thrust" />
-    <option name="LAST_COMMIT_MESSAGE" value="reduction is now (using msp) slightly faster than thrust" />
+    <MESSAGE value="reduction is now (using msp) slightly faster than thrust for all input sizes until aprox.  2^27" />
+    <option name="LAST_COMMIT_MESSAGE" value="reduction is now (using msp) slightly faster than thrust for all input sizes until aprox.  2^27" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -885,7 +893,7 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#55#73#0" expanded="true" />
-            <element signature="e#289#341#0" expanded="true" />
+            <element signature="e#291#343#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -977,11 +985,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/include/detail/algorithms/reduce.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="67" column="8" selection-start-line="67" selection-start-column="8" selection-end-line="67" selection-end-column="8" />
+        <state relative-caret-position="76">
+          <caret line="58" column="32" selection-start-line="58" selection-start-column="32" selection-end-line="58" selection-end-column="32" />
           <folding>
             <element signature="e#55#73#0" expanded="true" />
-            <element signature="e#289#341#0" expanded="true" />
+            <element signature="e#291#343#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -6,6 +6,7 @@
 // actions and algorithms
 #include <detail/algorithms/transform.h>
 #include <detail/algorithms/reduce.h>
+#include <detail/algorithms/for_each.h>
 
 // operators
 #include <detail/operators/copy.h>
@@ -13,3 +14,6 @@
 
 // ranges
 #include <detail/ranges/vector.h>
+
+// decorators
+#include <detail/decorators/ref.h>

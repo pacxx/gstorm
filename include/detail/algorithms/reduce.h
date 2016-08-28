@@ -8,9 +8,7 @@
 #include <range/v3/all.hpp>
 #include <PACXX.h>
 #include <detail/ranges/vector.h>
-
-#define REDUCE_THREAD_N 128ul
-#define REDUCE_BLOCK_N 130
+#include <detail/common/Timing.h>
 
 namespace gstorm {
 
@@ -58,8 +56,8 @@ namespace gstorm {
 
         void operator()(InTy in, OutTy out, size_t distance, value_type init, size_t ept) const {
 
-          [[shared]] value_type sdata[REDUCE_THREAD_N];
-
+          //[[shared]] value_type sdata[1024];
+          pacxx::v2::shared_memory<value_type> sdata;
           auto block = Block::get();
           size_t tid = Thread::get().index.x;
           auto n = pacxx::v2::_stage([&] { return distance; });
@@ -69,7 +67,7 @@ namespace gstorm {
 
           value_type sum = init;
 
-          size_t gridSize = REDUCE_THREAD_N * Grid::get().range.x;
+          size_t gridSize = block.range.x * Grid::get().range.x;
           size_t i = Thread::get().global.x;
 
           for (int x = 0; x < elements_per_thread; ++x) {
@@ -85,7 +83,21 @@ namespace gstorm {
 
           sdata[tid] = sum;
           block.synchronize();
-
+          if (block.range.x >= 1024) {
+            if (tid < 512)
+              sdata[tid] = func(sdata[tid], sdata[tid + 512]);
+            block.synchronize();
+          }
+          if (block.range.x >= 512) {
+            if (tid < 256)
+              sdata[tid] = func(sdata[tid], sdata[tid + 256]);
+            block.synchronize();
+          }
+          if (block.range.x >= 256) {
+            if (tid < 128)
+              sdata[tid] = func(sdata[tid], sdata[tid + 128]);
+            block.synchronize();
+          }
           if (tid < 64)
             sdata[tid] = func(sdata[tid], sdata[tid + 64]);
           block.synchronize();
@@ -106,8 +118,13 @@ namespace gstorm {
 
       template<typename InRng, typename BinaryFunc>
       auto reduce(InRng&& in, std::remove_reference_t<decltype(*in.begin())> init, BinaryFunc&& func) {
+        auto result_val = init;
+
         size_t distance = ranges::v3::distance(in);
-        size_t thread_count = std::min(REDUCE_THREAD_N, distance);
+        size_t thread_count = 128;
+        if (distance >= 1 << 24)
+          thread_count = 1024;
+        thread_count = std::min(thread_count, distance);
         size_t ept = 1;
         if (distance > thread_count * 2) {
           do {
@@ -116,7 +133,6 @@ namespace gstorm {
           while (distance / (thread_count * ept) > 130);
         }
 
-        __error(ept);
         size_t block_count = std::max(distance / (thread_count * ept), 1ul);
 
         using value_type = std::remove_reference_t<decltype(*in.begin())>;
@@ -124,16 +140,18 @@ namespace gstorm {
         range::gvector<std::vector<value_type>> out(result);
 
         auto kernel = pacxx::v2::kernel(
-            reduce_functor<decltype(in.begin()), decltype(out.begin()), BinaryFunc>(std::forward<BinaryFunc>(func)),
+            reduce_functor<decltype(in.begin()), decltype(out.begin()), BinaryFunc>(
+                std::forward<BinaryFunc>(func)),
             {{block_count},
-             {thread_count}});
+             {thread_count}, thread_count * sizeof(value_type)});
 
         kernel(in.begin(), out.begin(), distance, init, ept);
 
-
         result = out;
 
-        return std::accumulate(result.begin(), result.end(), init, func);
+        result_val = std::accumulate(result.begin(), result.end(), init, func);
+
+        return result_val;
       };
     }
   }

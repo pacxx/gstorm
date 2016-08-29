@@ -16,7 +16,6 @@
   <component name="ChangeListManager">
     <list default="true" id="54f16c39-d1b2-4179-baba-466d34b4a33e" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/include/detail/algorithms/reduce.h" afterPath="$PROJECT_DIR$/include/detail/algorithms/reduce.h" />
     </list>
     <ignored path="gstorm.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -634,7 +633,7 @@
       <workItem from="1472293559657" duration="7822000" />
       <workItem from="1472334699045" duration="1050000" />
       <workItem from="1472377295305" duration="3804000" />
-      <workItem from="1472406529640" duration="2807000" />
+      <workItem from="1472406529640" duration="3899000" />
     </task>
     <task id="LOCAL-00001" summary="transform view has landed with implicit evaluation when used on a LHS of an asignment to an std::vector (other containers currently not supported)">
       <created>1470391733207</created>
@@ -720,11 +719,18 @@
       <option name="project" value="LOCAL" />
       <updated>1472310780575</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="reduction now uses 1024 threads for input sizes &gt;= 2^24. now gstorm is always faster than thrust">
+      <created>1472409831717</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1472409831717</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="182313000" />
+    <option name="totallyTimeSpent" value="183405000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="0" width="1922" height="1053" extended-state="6" />
@@ -775,7 +781,8 @@
     <MESSAGE value="made reduction safe for input sizes &lt; 128" />
     <MESSAGE value="bugfix in reduction kernel" />
     <MESSAGE value="added for_each algorithm and ref wrapper for gvector" />
-    <option name="LAST_COMMIT_MESSAGE" value="added for_each algorithm and ref wrapper for gvector" />
+    <MESSAGE value="reduction now uses 1024 threads for input sizes &gt;= 2^24. now gstorm is always faster than thrust" />
+    <option name="LAST_COMMIT_MESSAGE" value="reduction now uses 1024 threads for input sizes &gt;= 2^24. now gstorm is always faster than thrust" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">

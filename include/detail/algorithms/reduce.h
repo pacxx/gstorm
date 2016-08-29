@@ -60,9 +60,9 @@ namespace gstorm {
           pacxx::v2::shared_memory<value_type> sdata;
           auto block = Block::get();
           size_t tid = Thread::get().index.x;
-          auto n = pacxx::v2::_stage([&] { return distance; });
-          auto IsPow2 = (n & (n - 1)) == 0;
-
+//          auto n = pacxx::v2::_stage([&] { return distance; });
+//          auto IsPow2 = (n & (n - 1)) == 0;
+          auto n = distance; 
           int elements_per_thread = pacxx::v2::_stage([&] { return ept; });
 
           value_type sum = init;
@@ -75,7 +75,7 @@ namespace gstorm {
             i += gridSize;
           }
 
-          if (!IsPow2)
+//          if (!IsPow2)
             while (i < n) {
               sum = func(sum, *(in + i));
               i += gridSize;
@@ -133,8 +133,9 @@ namespace gstorm {
           while (distance / (thread_count * ept) > 130);
         }
 
-        size_t block_count = std::max(distance / (thread_count * ept), 1ul);
-
+        size_t block_count = std::max(distance / thread_count + (distance % thread_count > 0 ? 1 : 0), 1ul);
+        block_count = std::min(block_count, 130ul); 
+        ept = distance / (thread_count * block_count); 
         using value_type = std::remove_reference_t<decltype(*in.begin())>;
         std::vector<value_type> result(block_count, init);
         range::gvector<std::vector<value_type>> out(result);

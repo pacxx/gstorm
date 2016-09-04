@@ -15,7 +15,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="54f16c39-d1b2-4179-baba-466d34b4a33e" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/include/detail/algorithms/fill.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/include/detail/operators/functional.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/gstorm.iml" afterPath="$PROJECT_DIR$/.idea/gstorm.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CMakeLists.txt" afterPath="$PROJECT_DIR$/CMakeLists.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/include/detail/decorators/ref.h" afterPath="$PROJECT_DIR$/include/detail/decorators/ref.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/include/detail/ranges/vector.h" afterPath="$PROJECT_DIR$/include/detail/ranges/vector.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/include/gstorm.h" afterPath="$PROJECT_DIR$/include/gstorm.h" />
     </list>
     <ignored path="gstorm.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -48,31 +55,29 @@
       <file leaf-file-name="transform.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/include/detail/algorithms/transform.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="252">
-              <caret line="14" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
+            <state relative-caret-position="344">
+              <caret line="37" column="0" selection-start-line="37" selection-start-column="0" selection-end-line="37" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="async.h" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/include/detail/operators/async.h">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
-              <caret line="12" column="40" selection-start-line="12" selection-start-column="40" selection-end-line="12" selection-end-column="40" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="reduce.h" pinned="false" current-in-tab="true">
+      <file leaf-file-name="reduce.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/include/detail/algorithms/reduce.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="558">
-              <caret line="145" column="63" selection-start-line="145" selection-start-column="63" selection-end-line="145" selection-end-column="63" />
-              <folding>
-                <element signature="e#55#73#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="2610">
+              <caret line="145" column="27" selection-start-line="145" selection-start-column="27" selection-end-line="145" selection-end-column="27" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="functional.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/include/detail/operators/functional.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="198">
+              <caret line="11" column="10" selection-start-line="11" selection-start-column="10" selection-end-line="11" selection-end-column="10" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -80,8 +85,8 @@
       <file leaf-file-name="ref.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/include/detail/decorators/ref.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="504">
-              <caret line="28" column="26" selection-start-line="28" selection-start-column="26" selection-end-line="28" selection-end-column="26" />
+            <state relative-caret-position="1152">
+              <caret line="64" column="21" selection-start-line="64" selection-start-column="21" selection-end-line="64" selection-end-column="21" />
               <folding />
             </state>
           </provider>
@@ -97,11 +102,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="vector.h" pinned="false" current-in-tab="false">
+      <file leaf-file-name="vector.h" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/include/detail/ranges/vector.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2466">
-              <caret line="137" column="38" selection-start-line="137" selection-start-column="38" selection-end-line="137" selection-end-column="38" />
+            <state relative-caret-position="316">
+              <caret line="184" column="13" selection-start-line="184" selection-start-column="13" selection-end-line="184" selection-end-column="13" />
               <folding>
                 <element signature="e#0#2#0" expanded="false" />
               </folding>
@@ -109,25 +114,22 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="tuple_helper.h" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/include/meta/tuple_helper.h">
+      <file leaf-file-name="async.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/include/detail/operators/async.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1116">
-              <caret line="62" column="1" selection-start-line="62" selection-start-column="1" selection-end-line="62" selection-end-column="1" />
+            <state relative-caret-position="94">
+              <caret line="12" column="40" selection-start-line="12" selection-start-column="40" selection-end-line="12" selection-end-column="40" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="traits.h" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/include/detail/traits.h">
+      <file leaf-file-name="fill.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/include/detail/algorithms/fill.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1224">
-              <caret line="68" column="1" selection-start-line="68" selection-start-column="1" selection-end-line="68" selection-end-column="1" />
-              <folding>
-                <marker date="1471957228000" expanded="true" signature="108:1555" ph="{...}" />
-                <marker date="1471957228000" expanded="true" signature="129:306" ph="{...}" />
-              </folding>
+            <state relative-caret-position="252">
+              <caret line="14" column="64" selection-start-line="14" selection-start-column="64" selection-end-line="14" selection-end-column="64" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -135,8 +137,8 @@
       <file leaf-file-name="gstorm.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/include/gstorm.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="324">
-              <caret line="18" column="27" selection-start-line="18" selection-start-column="27" selection-end-line="18" selection-end-column="27" />
+            <state relative-caret-position="378">
+              <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -161,7 +163,6 @@
         <option value="$PROJECT_DIR$/tests/transform.cpp" />
         <option value="$PROJECT_DIR$/include/detail/views/materialize.h" />
         <option value="$PROJECT_DIR$/include/detail/actions/gpu/transform.h" />
-        <option value="$PROJECT_DIR$/include/detail/algorithms/transform.h" />
         <option value="$PROJECT_DIR$/include/detail/operators/copy.h" />
         <option value="$PROJECT_DIR$/include/detail/views/repeat.h" />
         <option value="$PROJECT_DIR$/include/detail/traits.h" />
@@ -171,11 +172,15 @@
         <option value="$PROJECT_DIR$/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/include/detail/actions/transform.h" />
         <option value="$PROJECT_DIR$/include/detail/algorithms/reduce.h.h" />
-        <option value="$PROJECT_DIR$/include/detail/ranges/vector.h" />
-        <option value="$PROJECT_DIR$/include/gstorm.h" />
-        <option value="$PROJECT_DIR$/include/detail/decorators/ref.h" />
         <option value="$PROJECT_DIR$/include/detail/algorithms/for_each.h" />
         <option value="$PROJECT_DIR$/include/detail/algorithms/reduce.h" />
+        <option value="$PROJECT_DIR$/include/detail/algorithms/fill.h" />
+        <option value="$PROJECT_DIR$/include/detail/operators/functional.h" />
+        <option value="$PROJECT_DIR$/include/detail/decorators/ref.h" />
+        <option value="$PROJECT_DIR$/include/detail/algorithms/transform.h" />
+        <option value="$PROJECT_DIR$/include/detail/utility/raw_ptr_cast.h" />
+        <option value="$PROJECT_DIR$/include/gstorm.h" />
+        <option value="$PROJECT_DIR$/include/detail/ranges/vector.h" />
       </list>
     </option>
   </component>
@@ -634,6 +639,12 @@
       <workItem from="1472334699045" duration="1050000" />
       <workItem from="1472377295305" duration="3804000" />
       <workItem from="1472406529640" duration="3899000" />
+      <workItem from="1472576139319" duration="19000" />
+      <workItem from="1472576460570" duration="6466000" />
+      <workItem from="1472665992615" duration="2469000" />
+      <workItem from="1472842155540" duration="1345000" />
+      <workItem from="1472897623551" duration="9880000" />
+      <workItem from="1472983720913" duration="10069000" />
     </task>
     <task id="LOCAL-00001" summary="transform view has landed with implicit evaluation when used on a LHS of an asignment to an std::vector (other containers currently not supported)">
       <created>1470391733207</created>
@@ -730,19 +741,19 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="183405000" />
+    <option name="totallyTimeSpent" value="213653000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="0" width="1922" height="1053" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16932908" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17678382" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32938644" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32938644" sideWeight="0.5018431" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290735" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2774228" sideWeight="0.49815693" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2774228" sideWeight="0.49815693" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -792,21 +803,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/tests/transform.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="702">
-          <caret line="39" column="56" selection-start-line="39" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/include/detail/operators/copy.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="594">
-          <caret line="33" column="30" selection-start-line="33" selection-start-column="30" selection-end-line="33" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/include/detail/views/materialize.h" />
     <entry file="file://$PROJECT_DIR$/include/action.h" />
     <entry file="file://$PROJECT_DIR$/include/meta/tuple_helper.h">
       <provider selected="true" editor-type-id="text-editor">
@@ -896,10 +892,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1471957228000" expanded="true" signature="108:1555" ph="{...}" />
-            <marker date="1471957228000" expanded="true" signature="129:306" ph="{...}" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -937,9 +929,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#55#73#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -947,15 +937,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="198">
           <caret line="11" column="41" selection-start-line="11" selection-start-column="41" selection-end-line="11" selection-end-column="41" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/include/detail/operators/async.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="12" column="40" selection-start-line="12" selection-start-column="40" selection-end-line="12" selection-end-column="40" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -970,10 +951,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1224">
           <caret line="68" column="1" selection-start-line="68" selection-start-column="1" selection-end-line="68" selection-end-column="1" />
-          <folding>
-            <marker date="1471957228000" expanded="true" signature="108:1555" ph="{...}" />
-            <marker date="1471957228000" expanded="true" signature="129:306" ph="{...}" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -985,16 +962,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/include/detail/ranges/vector.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2466">
-          <caret line="137" column="38" selection-start-line="137" selection-start-column="38" selection-end-line="137" selection-end-column="38" />
-          <folding>
-            <element signature="e#0#2#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/include/detail/actions/transform.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="234">
@@ -1003,26 +970,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/include/detail/algorithms/transform.h">
+    <entry file="file://$PROJECT_DIR$/include/detail/algorithms/reduce.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2610">
+          <caret line="145" column="27" selection-start-line="145" selection-start-column="27" selection-end-line="145" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/detail/algorithms/fill.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="252">
-          <caret line="14" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/include/gstorm.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="18" column="27" selection-start-line="18" selection-start-column="27" selection-end-line="18" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/include/detail/decorators/ref.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="504">
-          <caret line="28" column="26" selection-start-line="28" selection-start-column="26" selection-end-line="28" selection-end-column="26" />
+          <caret line="14" column="64" selection-start-line="14" selection-start-column="64" selection-end-line="14" selection-end-column="64" />
           <folding />
         </state>
       </provider>
@@ -1035,12 +994,60 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/include/detail/algorithms/reduce.h">
+    <entry file="file://$PROJECT_DIR$/include/detail/decorators/ref.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="558">
-          <caret line="145" column="63" selection-start-line="145" selection-start-column="63" selection-end-line="145" selection-end-column="63" />
+        <state relative-caret-position="1152">
+          <caret line="64" column="21" selection-start-line="64" selection-start-column="21" selection-end-line="64" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/detail/operators/functional.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="11" column="10" selection-start-line="11" selection-start-column="10" selection-end-line="11" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/detail/algorithms/transform.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="344">
+          <caret line="37" column="0" selection-start-line="37" selection-start-column="0" selection-end-line="37" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/detail/utility/raw_ptr_cast.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/gstorm.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="378">
+          <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/detail/operators/async.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="94">
+          <caret line="12" column="40" selection-start-line="12" selection-start-column="40" selection-end-line="12" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/detail/ranges/vector.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="316">
+          <caret line="184" column="13" selection-start-line="184" selection-start-column="13" selection-end-line="184" selection-end-column="13" />
           <folding>
-            <element signature="e#55#73#0" expanded="true" />
+            <element signature="e#0#2#0" expanded="false" />
           </folding>
         </state>
       </provider>

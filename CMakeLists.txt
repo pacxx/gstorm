@@ -23,5 +23,5 @@ link_directories("${PACXXRT_PATH}/build")
 
 include_directories("./include")
 
-set(SOURCE_FILES tests/transform.cpp include/meta/static_const.h include/detail/ranges/vector.h include/detail/traits.h include/meta/tuple_helper.h include/detail/operators/copy.h include/gstorm.h include/detail/actions/transform.h include/detail/operators/async.h include/detail/algorithms/transform.h include/detail/algorithms/reduce.h include/detail/decorators/ref.h include/detail/algorithms/for_each.h)
+set(SOURCE_FILES tests/transform.cpp include/meta/static_const.h include/detail/ranges/vector.h include/detail/traits.h include/meta/tuple_helper.h include/detail/operators/copy.h include/gstorm.h include/detail/actions/transform.h include/detail/operators/async.h include/detail/algorithms/transform.h include/detail/algorithms/reduce.h include/detail/decorators/ref.h include/detail/algorithms/for_each.h include/detail/algorithms/fill.h)
 add_executable(gstorm ${SOURCE_FILES})

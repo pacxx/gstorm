@@ -11,6 +11,7 @@
 #include <type_traits>
 #include <PACXX.h>
 #include <range/v3/view_facade.hpp>
+#include <detail/algorithms/fill.h>
 
 namespace gstorm {
 
@@ -142,12 +143,20 @@ namespace gstorm {
 
       gvector() : _buffer(nullptr), _size(0) {}
 
-      gvector(size_t size) : _buffer(&pacxx::v2::get_executor().allocate<typename T::value_type>(size)),
-                             _size(size) {
+//      gvector(size_t size) : _buffer(&pacxx::v2::get_executor().allocate<typename T::value_type>(size)),
+//                             _size(size) {
+////        __message("allocated ", (void*)_buffer);
+//      }
+
+      gvector(size_t size, value_type value) : _buffer(
+          &pacxx::v2::get_executor().allocate<typename T::value_type>(size)),
+                                               _size(size) {
 //        __message("allocated ", (void*)_buffer);
+        gpu::algorithm::fill(*this, value);
       }
 
-      gvector(const T& vec) : gvector(vec.size()) {
+      gvector(const T& vec) : _buffer(&pacxx::v2::get_executor().allocate<typename T::value_type>(vec.size())),
+                              _size(vec.size()) {
         _buffer->upload(vec.data(), vec.size());
       }
 
@@ -157,19 +166,35 @@ namespace gstorm {
           _buffer->abandon();
       }
 
-      gvector(const gvector&) = delete;
+      gvector(const gvector& src) = delete;
+//      gvector(const gvector& src) : _buffer(&pacxx::v2::get_executor().allocate<typename T::value_type>(src.size())),
+//      _size(src.size()){
+//        src._buffer->copyTo(_buffer->get());
+//      }
 
       gvector(gvector&& other) {
         _buffer = other._buffer;
-        //     __message("moved ", (void*)_buffer);
         other._buffer = nullptr;
         _size = other._size;
         other._size = 0;
       }
 
-      gvector& operator=(const gvector&) = delete;
+//      gvector& operator=(const gvector& src) = delete;
+      gvector& operator=(const gvector& src) {
+        //  src._buffer->copyTo(_buffer->get());
+        gpu::algorithm::transform(src, *this, [](auto&& v) { return v; });
+        return *this;
+      }
 
-      gvector& operator=(gvector&&) = delete;
+//      gvector& operator=(gvector&& other) = delete;
+      gvector& operator=(gvector&& other) {
+        _buffer = other._buffer;
+        //     __message("moved ", (void*)_buffer);
+        other._buffer = nullptr;
+        _size = other._size;
+        other._size = 0;
+        return *this;
+      }
 
       iterator begin() noexcept { return iterator(_buffer->get()); }
 
@@ -179,10 +204,39 @@ namespace gstorm {
 
       const iterator end() const noexcept { return iterator(_buffer->get(_size)); }
 
+      auto size() const { return _size; }
+
+      void resize(size_type size) {
+        auto new_buffer = &pacxx::v2::get_executor().allocate<typename T::value_type>(size);
+        if (_buffer)
+          _buffer->copyTo(new_buffer->get());
+        _size = size;
+        if (_buffer)
+          _buffer->abandon();
+        _buffer = new_buffer;
+      }
+
       operator std::remove_cv_t<T>() const {
         T tmp(_size);
         _buffer->download(tmp.data(), tmp.size());
         return tmp;
+      }
+
+      void swap(gvector& other) {
+        std::swap(_buffer, other._buffer);
+        std::swap(_size, other._size);
+      }
+
+      typename T::value_type* data() {
+        return _buffer->get();
+      }
+
+      const typename T::value_type* data() const {
+        return _buffer->get();
+      }
+
+      reference operator[](difference_type n) const {
+        return *_buffer->get(n);
       }
 
     private:

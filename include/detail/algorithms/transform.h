@@ -12,6 +12,7 @@
 #include <detail/operators/copy.h>
 #include <detail/ranges/vector.h>
 #include <meta/static_const.h>
+#include <detail/algorithms/config.h>
 
 namespace gstorm {
   namespace gpu {
@@ -23,12 +24,32 @@ namespace gstorm {
                         OutTy out,
                         size_t distance,
                         UnaryFunc func) const {
-          auto id = Thread::get().global;
-          if (static_cast<size_t>(id.x) >= distance) return;
+          auto id = get_global_id(0);
+          if (static_cast<size_t>(id) >= distance) return;
 
-          *(out + id.x) = func(*(in + id.x));
+          *(out + id) = func(*(in + id));
         }
+        void operator()(InTy in,
+                        OutTy out,
+                        UnaryFunc func) const {
+          auto id = get_global_id(0) + get_global_id(1) * get_grid_size(0);
+
+          *(out + id) = func(*(in + id));
+        }
+
       };
+
+      template<typename InRng, typename OutRng, typename UnaryFunc>
+      auto transform(InRng&& in, OutRng& out, UnaryFunc&& func, config cfg) {
+
+        auto kernel = pacxx::v2::kernel(
+            transform_functor<decltype(in.begin()), decltype(out.begin()), UnaryFunc>(),
+            {{cfg.blocks.x, cfg.blocks.y, cfg.blocks.z},
+             {cfg.threads.x, cfg.threads.y, cfg.threads.z}});
+
+        kernel(in.begin(), out.begin(), func);
+      };
+
 
       template<typename InRng, typename OutRng, typename UnaryFunc>
       auto transform(InRng&& in, OutRng& out, UnaryFunc&& func) {

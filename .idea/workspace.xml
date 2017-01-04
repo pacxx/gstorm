@@ -15,14 +15,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="54f16c39-d1b2-4179-baba-466d34b4a33e" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/include/detail/algorithms/fill.h" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/include/detail/operators/functional.h" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/gstorm.iml" afterPath="$PROJECT_DIR$/.idea/gstorm.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CMakeLists.txt" afterPath="$PROJECT_DIR$/CMakeLists.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/include/detail/decorators/ref.h" afterPath="$PROJECT_DIR$/include/detail/decorators/ref.h" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/include/detail/ranges/vector.h" afterPath="$PROJECT_DIR$/include/detail/ranges/vector.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/include/gstorm.h" afterPath="$PROJECT_DIR$/include/gstorm.h" />
     </list>
     <ignored path="gstorm.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -55,18 +50,18 @@
       <file leaf-file-name="transform.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/include/detail/algorithms/transform.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="344">
-              <caret line="37" column="0" selection-start-line="37" selection-start-column="0" selection-end-line="37" selection-end-column="0" />
+            <state relative-caret-position="360">
+              <caret line="32" column="33" selection-start-line="32" selection-start-column="33" selection-end-line="32" selection-end-column="33" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="reduce.h" pinned="false" current-in-tab="false">
+      <file leaf-file-name="reduce.h" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/include/detail/algorithms/reduce.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2610">
-              <caret line="145" column="27" selection-start-line="145" selection-start-column="27" selection-end-line="145" selection-end-column="27" />
+            <state relative-caret-position="198">
+              <caret line="65" column="36" selection-start-line="65" selection-start-column="36" selection-end-line="65" selection-end-column="36" />
               <folding />
             </state>
           </provider>
@@ -102,11 +97,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="vector.h" pinned="false" current-in-tab="true">
+      <file leaf-file-name="vector.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/include/detail/ranges/vector.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="316">
-              <caret line="184" column="13" selection-start-line="184" selection-start-column="13" selection-end-line="184" selection-end-column="13" />
+            <state relative-caret-position="3312">
+              <caret line="184" column="2" selection-start-line="184" selection-start-column="2" selection-end-line="184" selection-end-column="2" />
               <folding>
                 <element signature="e#0#2#0" expanded="false" />
               </folding>
@@ -117,7 +112,7 @@
       <file leaf-file-name="async.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/include/detail/operators/async.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="94">
+            <state relative-caret-position="216">
               <caret line="12" column="40" selection-start-line="12" selection-start-column="40" selection-end-line="12" selection-end-column="40" />
               <folding />
             </state>
@@ -127,8 +122,8 @@
       <file leaf-file-name="fill.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/include/detail/algorithms/fill.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="252">
-              <caret line="14" column="64" selection-start-line="14" selection-start-column="64" selection-end-line="14" selection-end-column="64" />
+            <state relative-caret-position="270">
+              <caret line="15" column="64" selection-start-line="15" selection-start-column="64" selection-end-line="15" selection-end-column="64" />
               <folding />
             </state>
           </provider>
@@ -173,7 +168,6 @@
         <option value="$PROJECT_DIR$/include/detail/actions/transform.h" />
         <option value="$PROJECT_DIR$/include/detail/algorithms/reduce.h.h" />
         <option value="$PROJECT_DIR$/include/detail/algorithms/for_each.h" />
-        <option value="$PROJECT_DIR$/include/detail/algorithms/reduce.h" />
         <option value="$PROJECT_DIR$/include/detail/algorithms/fill.h" />
         <option value="$PROJECT_DIR$/include/detail/operators/functional.h" />
         <option value="$PROJECT_DIR$/include/detail/decorators/ref.h" />
@@ -181,6 +175,7 @@
         <option value="$PROJECT_DIR$/include/detail/utility/raw_ptr_cast.h" />
         <option value="$PROJECT_DIR$/include/gstorm.h" />
         <option value="$PROJECT_DIR$/include/detail/ranges/vector.h" />
+        <option value="$PROJECT_DIR$/include/detail/algorithms/reduce.h" />
       </list>
     </option>
   </component>
@@ -191,9 +186,8 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-1" />
-    <option name="width" value="1922" />
-    <option name="height" value="1053" />
+    <option name="width" value="1920" />
+    <option name="height" value="1052" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -644,7 +638,12 @@
       <workItem from="1472665992615" duration="2469000" />
       <workItem from="1472842155540" duration="1345000" />
       <workItem from="1472897623551" duration="9880000" />
-      <workItem from="1472983720913" duration="10069000" />
+      <workItem from="1472983720913" duration="10268000" />
+      <workItem from="1473058949666" duration="2756000" />
+      <workItem from="1473156440376" duration="1218000" />
+      <workItem from="1473278786893" duration="1254000" />
+      <workItem from="1473320117017" duration="878000" />
+      <workItem from="1473335647976" duration="2494000" />
     </task>
     <task id="LOCAL-00001" summary="transform view has landed with implicit evaluation when used on a LHS of an asignment to an std::vector (other containers currently not supported)">
       <created>1470391733207</created>
@@ -737,17 +736,24 @@
       <option name="project" value="LOCAL" />
       <updated>1472409831717</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="fill algorithm and vector improvements">
+      <created>1473009000391</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1473009000391</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="213653000" />
+    <option name="totallyTimeSpent" value="222452000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1" y="0" width="1922" height="1053" extended-state="6" />
-    <editor active="true" />
+    <frame x="0" y="0" width="1920" height="1052" extended-state="0" />
+    <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17678382" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18496802" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32938644" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32938644" sideWeight="0.5018431" order="8" side_tool="true" content_ui="tabs" />
@@ -793,7 +799,8 @@
     <MESSAGE value="bugfix in reduction kernel" />
     <MESSAGE value="added for_each algorithm and ref wrapper for gvector" />
     <MESSAGE value="reduction now uses 1024 threads for input sizes &gt;= 2^24. now gstorm is always faster than thrust" />
-    <option name="LAST_COMMIT_MESSAGE" value="reduction now uses 1024 threads for input sizes &gt;= 2^24. now gstorm is always faster than thrust" />
+    <MESSAGE value="fill algorithm and vector improvements" />
+    <option name="LAST_COMMIT_MESSAGE" value="fill algorithm and vector improvements" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -958,7 +965,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1116">
           <caret line="62" column="1" selection-start-line="62" selection-start-column="1" selection-end-line="62" selection-end-column="1" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -970,18 +976,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/include/detail/algorithms/reduce.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2610">
-          <caret line="145" column="27" selection-start-line="145" selection-start-column="27" selection-end-line="145" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/include/detail/algorithms/fill.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="14" column="64" selection-start-line="14" selection-start-column="64" selection-end-line="14" selection-end-column="64" />
+        <state relative-caret-position="270">
+          <caret line="15" column="64" selection-start-line="15" selection-start-column="64" selection-end-line="15" selection-end-column="64" />
           <folding />
         </state>
       </provider>
@@ -1010,22 +1008,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/include/detail/algorithms/transform.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="344">
-          <caret line="37" column="0" selection-start-line="37" selection-start-column="0" selection-end-line="37" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/include/detail/utility/raw_ptr_cast.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/include/detail/utility/raw_ptr_cast.h" />
     <entry file="file://$PROJECT_DIR$/include/gstorm.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="378">
@@ -1036,7 +1019,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/include/detail/operators/async.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="94">
+        <state relative-caret-position="216">
           <caret line="12" column="40" selection-start-line="12" selection-start-column="40" selection-end-line="12" selection-end-column="40" />
           <folding />
         </state>
@@ -1044,11 +1027,27 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/include/detail/ranges/vector.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="316">
-          <caret line="184" column="13" selection-start-line="184" selection-start-column="13" selection-end-line="184" selection-end-column="13" />
+        <state relative-caret-position="3312">
+          <caret line="184" column="2" selection-start-line="184" selection-start-column="2" selection-end-line="184" selection-end-column="2" />
           <folding>
             <element signature="e#0#2#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/detail/algorithms/transform.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="32" column="33" selection-start-line="32" selection-start-column="33" selection-end-line="32" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/detail/algorithms/reduce.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="65" column="36" selection-start-line="65" selection-start-column="36" selection-end-line="65" selection-end-column="36" />
+          <folding />
         </state>
       </provider>
     </entry>

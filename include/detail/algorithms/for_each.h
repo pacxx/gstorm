@@ -24,10 +24,10 @@ namespace gstorm {
         void operator()(InTy in,
                         size_t distance,
                         UnaryFunc func) const {
-          auto id = Thread::get().global;
-          if (static_cast<size_t>(id.x) >= distance) return;
+          auto id = get_global_id(0);
+          if (static_cast<size_t>(id) >= distance) return;
 
-          func(*(in + id.x));
+          func(*(in + id));
         }
       };
 

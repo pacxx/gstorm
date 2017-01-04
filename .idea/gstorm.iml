@@ -9,14 +9,13 @@
       <sourceFolder url="file://$MODULE_DIR$/include/detail/decorators/ref.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/detail/operators/async.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/detail/operators/copy.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/include/detail/actions/transform.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/detail/traits.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/detail/algorithms/reduce.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/detail/algorithms/for_each.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/detail/algorithms/fill.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/detail/algorithms/transform.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/include/detail/ranges/vector.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/include/detail/traits.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/include/detail/utility/raw_ptr_cast.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/detail/actions/transform.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />

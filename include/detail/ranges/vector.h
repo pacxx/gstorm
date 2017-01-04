@@ -39,14 +39,16 @@ namespace gstorm {
       using reference = std::conditional_t<std::is_const<T>::value, const typename T::reference, typename T::reference>;
       using const_reference = typename T::const_reference;
       using difference_type = typename T::difference_type;
+      using pointer = value_type*;
 
-      struct iterator : public ranges::v3::random_access_iterator_tag, public traits::range_forward_traits<T> {
+      struct iterator : public std::random_access_iterator_tag, public traits::range_forward_traits<T> {
         using size_type = typename T::size_type;
         using value_type = typename T::value_type;
         using reference = std::conditional_t<std::is_const<T>::value, const typename T::reference, typename T::reference>;
         using const_reference = typename T::const_reference;
         using difference_type = typename T::difference_type;
-        using iterator_category = ranges::v3::random_access_iterator_tag;
+        using iterator_category = std::random_access_iterator_tag;
+        using pointer = value_type*; 
 
         iterator() = default;
 
@@ -143,10 +145,10 @@ namespace gstorm {
 
       gvector() : _buffer(nullptr), _size(0) {}
 
-//      gvector(size_t size) : _buffer(&pacxx::v2::get_executor().allocate<typename T::value_type>(size)),
-//                             _size(size) {
-////        __message("allocated ", (void*)_buffer);
-//      }
+      gvector(size_t size) : _buffer(&pacxx::v2::get_executor().allocate<typename T::value_type>(size)),
+                             _size(size) {
+//        __message("allocated ", (void*)_buffer);
+      }
 
       gvector(size_t size, value_type value) : _buffer(
           &pacxx::v2::get_executor().allocate<typename T::value_type>(size)),
@@ -181,8 +183,8 @@ namespace gstorm {
 
 //      gvector& operator=(const gvector& src) = delete;
       gvector& operator=(const gvector& src) {
-        //  src._buffer->copyTo(_buffer->get());
-        gpu::algorithm::transform(src, *this, [](auto&& v) { return v; });
+          src._buffer->copyTo(_buffer->get());
+//        gpu::algorithm::transform(src, *this, [](auto&& v) { return v; });
         return *this;
       }
 

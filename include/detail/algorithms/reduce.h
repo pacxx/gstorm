@@ -58,8 +58,7 @@ namespace gstorm {
 
           //[[shared]] value_type sdata[1024];
           pacxx::v2::shared_memory<value_type> sdata;
-          auto block = Block::get();
-          size_t tid = Thread::get().index.x;
+          size_t tid = get_local_id(0); 
 //          auto n = pacxx::v2::_stage([&] { return distance; });
 //          auto IsPow2 = (n & (n - 1)) == 0;
           auto n = distance; 
@@ -67,8 +66,8 @@ namespace gstorm {
 
           value_type sum = init;
 
-          size_t gridSize = block.range.x * Grid::get().range.x;
-          size_t i = Thread::get().global.x;
+          size_t gridSize = get_local_size(0) * get_num_groups(0);
+          size_t i = get_global_id(0);
 
           for (int x = 0; x < elements_per_thread; ++x) {
             sum = func(sum, *(in + i));
@@ -82,25 +81,25 @@ namespace gstorm {
             }
 
           sdata[tid] = sum;
-          block.synchronize();
-          if (block.range.x >= 1024) {
+          barrier(1);
+          if (get_local_size(0) >= 1024) {
             if (tid < 512)
               sdata[tid] = func(sdata[tid], sdata[tid + 512]);
-            block.synchronize();
+            barrier(1);
           }
-          if (block.range.x >= 512) {
+          if (get_local_size(0) >= 512) {
             if (tid < 256)
               sdata[tid] = func(sdata[tid], sdata[tid + 256]);
-            block.synchronize();
+            barrier(1);
           }
-          if (block.range.x >= 256) {
+          if (get_local_size(0) >= 256) {
             if (tid < 128)
               sdata[tid] = func(sdata[tid], sdata[tid + 128]);
-            block.synchronize();
+            barrier(1);
           }
           if (tid < 64)
             sdata[tid] = func(sdata[tid], sdata[tid + 64]);
-          block.synchronize();
+          barrier(1);
           if (tid < 32) {
             volatile value_type* sm = &sdata[0];
             sm[tid] = func(sm[tid], sm[tid + 32]);
@@ -111,7 +110,7 @@ namespace gstorm {
             sm[tid] = func(sm[tid], sm[tid + 1]);
           }
           if (tid == 0)
-            *(out + static_cast<size_t>(block.index.x)) = sdata[tid];
+            *(out + static_cast<size_t>(get_group_id(0))) = sdata[tid];
         }
       };
 

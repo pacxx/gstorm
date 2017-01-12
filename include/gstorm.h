@@ -16,6 +16,7 @@
 
 // ranges
 #include <detail/ranges/vector.h>
+#include <detail/ranges/index.h>
 
 // decorators
 #include <detail/decorators/ref.h>

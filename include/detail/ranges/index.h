@@ -22,7 +22,7 @@ namespace gstorm {
       using size_type = size_t;
       using value_type = std::pair<unsigned int, unsigned int>;
       using reference = value_type&;
-      using const_reference = const reference;
+      using const_reference = const value_type&;
       using difference_type = std::ptrdiff_t;
       using pointer = value_type*;
 
@@ -30,7 +30,7 @@ namespace gstorm {
         using size_type = size_t;
         using value_type = std::pair<unsigned int, unsigned int>;
         using reference = value_type&;
-        using const_reference = const reference;
+        using const_reference = const value_type&;
         using difference_type = std::ptrdiff_t;
         using iterator_category = std::random_access_iterator_tag;
         using pointer = value_type*; 

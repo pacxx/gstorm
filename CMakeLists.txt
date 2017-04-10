@@ -5,12 +5,12 @@ find_package(LLVM REQUIRED CONFIG)
 find_package(CUDA REQUIRED)
 
 
-add_compile_options(-std=pacxx -stdlib=libc++)
+add_compile_options(-std=c++14 -stdlib=libc++)
 add_definitions(${LLVM_DEFINITIONS})
 
-set(PACXX_PATH "/home/mhaidl/local" CACHE PATH "Path to PACXX")
-set(PACXXRT_PATH "/home/mhaidl/agamemnon/code/pacxx_v2" CACHE PATH "Path to PACXX")
-set(RANGES_V3_PATH "/home/mhaidl/code/range-v3" CACHE PATH "Path to PACXX")
+set(PACXX_PATH "/home/m_haid02/pacxx/local" CACHE PATH "Path to PACXX")
+set(PACXXRT_PATH "/home/m_haid02/pacxx/pacxx_rt" CACHE PATH "Path to PACXX")
+set(RANGES_V3_PATH "/home/m_haid02/projects/range-v3" CACHE PATH "Path to PACXX")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 
 include_directories(${CUDA_TOOLKIT_INCLUDE})

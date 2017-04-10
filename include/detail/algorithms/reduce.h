@@ -143,7 +143,7 @@ namespace gstorm {
             reduce_functor<decltype(in.begin()), decltype(out.begin()), BinaryFunc>(
                 std::forward<BinaryFunc>(func)),
             {{block_count},
-             {thread_count}, thread_count * sizeof(value_type)});
+             {thread_count}, 0, thread_count * sizeof(value_type)});
 
         kernel(in.begin(), out.begin(), distance, init, ept);
 

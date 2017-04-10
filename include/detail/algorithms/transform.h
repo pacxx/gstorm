@@ -60,7 +60,7 @@ namespace gstorm {
         auto kernel = pacxx::v2::kernel(
             transform_functor<decltype(in.begin()), decltype(out.begin()), UnaryFunc>(),
             {{(distance + thread_count - 1) / thread_count},
-             {thread_count}});
+             {thread_count}, 0});
 
         kernel(in.begin(), out.begin(), distance, func);
       };
@@ -74,7 +74,7 @@ namespace gstorm {
         auto kernel = pacxx::v2::kernel_with_cb(
             transform_functor<decltype(in.begin()), decltype(out.begin()), UnaryFunc>(),
             {{(distance + thread_count - 1) / thread_count},
-             {thread_count}}, std::forward<CallbackFunc>(callback));
+             {thread_count}, 0}, std::forward<CallbackFunc>(callback));
 
         kernel(in.begin(), out.begin(), distance, func);
       };

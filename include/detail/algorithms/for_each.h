@@ -40,7 +40,7 @@ namespace gstorm {
         auto kernel = pacxx::v2::kernel(
             for_each_functor<decltype(in.begin()), pacxx::meta::callable_wrapper<UnaryFunc>>(),
             {{(distance + thread_count - 1) / thread_count},
-             {thread_count}});
+             {thread_count}, 0, 0});
 
         kernel(in.begin(), distance, pacxx::meta::callable_wrapper<UnaryFunc>(func));
       };

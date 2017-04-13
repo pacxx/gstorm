@@ -192,11 +192,11 @@ auto reduceGPUNvidia(InRng &&in, std::remove_reference_t<decltype(*in.begin())> 
   std::vector<value_type> result(block_count, value_type());
   range::gvector <std::vector<value_type>> out(result);
 
-  auto kernel = pacxx::v2::kernel(
-      reduce_functorGPUNvidia<decltype(in.begin()), decltype(out.begin()), BinaryFunc>(
-          std::forward<BinaryFunc>(func)),
-      {{block_count},
-       {thread_count}, 0, thread_count * sizeof(value_type)});
+  using FunctorTy = reduce_functorGPUNvidia<decltype(in.begin()), decltype(out.begin()), BinaryFunc>;
+
+  auto kernel = pacxx::v2::kernel<FunctorTy, pacxx::v2::Target::GPU>(
+                              FunctorTy(std::forward<BinaryFunc>(func)),
+                              {{block_count}, {thread_count}, 0, thread_count * sizeof(value_type)});
 
   kernel(in.begin(), out.begin(), distance, ept);
 
@@ -225,11 +225,12 @@ auto reduceCPU(InRng &&in, std::remove_reference_t<decltype(*in.begin())> init, 
   size_t wpt = distance / (block_count * thread_count);
   bool remainder = distance % (block_count * thread_count) != 0;
 
-  auto kernel = pacxx::v2::kernel(
-      reduce_functorCPU<decltype(in.begin()), decltype(out.begin()), BinaryFunc>(
-          std::forward<BinaryFunc>(func)),
-      {{block_count},
-       {thread_count}, 0, 0});
+
+  using FunctorTy = reduce_functorCPU<decltype(in.begin()), decltype(out.begin()), BinaryFunc>;
+
+  auto kernel = pacxx::v2::kernel<FunctorTy, pacxx::v2::Target::CPU>(
+                                  FunctorTy(std::forward<BinaryFunc>(func)),
+                                  {{block_count}, {thread_count}, 0, 0});
 
   kernel(in.begin(), out.begin(), wpt);
 
@@ -249,8 +250,6 @@ template<typename InRng, typename BinaryFunc>
 auto reduce(InRng &&in, std::remove_reference_t<decltype(*in.begin())> init, BinaryFunc &&func) {
   using namespace pacxx::v2;
   auto &exec = Executor::get(0); // get default executor
-
-  //return detail::reduceGPUNvidia(std::forward<InRng>(in), init, std::forward<BinaryFunc>(func));
 
   switch (exec.getExecutingDeviceType()) {
   case ExecutingDevice::GPUNvidia:return detail::reduceGPUNvidia(std::forward<InRng>(in), init, std::forward<BinaryFunc>(func));

@@ -202,7 +202,7 @@ auto reduceGPUNvidia(InRng &&in, std::remove_reference_t<decltype(*in.begin())> 
 
   result = out;
 
-  result_val = std::accumulate(result.begin(), result.end(), init, func);
+  result_val = ranges::v3::accumulate(result, init, func);
 
   return result_val;
 };
@@ -218,7 +218,6 @@ auto reduceCPU(InRng &&in, std::remove_reference_t<decltype(*in.begin())> init, 
   size_t thread_count = exec.getVectorizationWidth<value_type>();
   size_t block_count = exec.getConcurrentCores();
 
-  using value_type = std::remove_reference_t<decltype(*in.begin())>;
   std::vector<value_type> result(block_count * thread_count, value_type());
   range::gvector <std::vector<value_type>> out(result);
 
@@ -236,10 +235,12 @@ auto reduceCPU(InRng &&in, std::remove_reference_t<decltype(*in.begin())> init, 
 
   result = out;
 
-  result_val = std::accumulate(result.begin(), result.end(), init, func);
+  result_val = ranges::v3::accumulate(result, init, func);
 
-  if (remainder)
-    result_val = std::accumulate(in.begin() + wpt * block_count * thread_count, in.end(), result_val, func);
+  if (remainder) {
+    auto rem = ranges::view::counted(in.begin() + wpt * block_count * thread_count, distance - (wpt * block_count * thread_count));
+    result_val = ranges::v3::accumulate(rem, result_val, func);
+  }
 
   return result_val;
 };
@@ -256,7 +257,7 @@ auto reduce(InRng &&in, std::remove_reference_t<decltype(*in.begin())> init, Bin
   case ExecutingDevice::CPU:return detail::reduceCPU(std::forward<InRng>(in), init, std::forward<BinaryFunc>(func));
   }
 
-  return 0;
+  return init;
 }
 }
 }

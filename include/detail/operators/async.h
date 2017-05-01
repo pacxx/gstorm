@@ -19,7 +19,7 @@ namespace gstorm {
     namespace meta {
 
       template<typename T, std::enable_if_t<traits::is_vector<T>::value>* = nullptr>
-      auto translate_memory(const T& data) {
+      auto translate_memory(T& data) {
         return range::gvector<T>(data);
       }
 
@@ -70,7 +70,7 @@ namespace gstorm {
       auto operator()(T&& view) const { return _async<T>(std::forward<T>(view)); }
 
       template<typename F, typename... Ts, typename = std::enable_if_t<!ranges::v3::is_view<F>::value>>
-      auto operator()(F&& function, const Ts& ... args) const {
+      auto operator()(F&& function, Ts& ... args) const {
 
         auto tpl = std::tuple<decltype(meta::translate_memory(args))...>(meta::translate_memory(args)...);
 

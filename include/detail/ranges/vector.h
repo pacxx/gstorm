@@ -157,7 +157,7 @@ namespace gstorm {
         gpu::algorithm::fill(*this, value);
       }
 
-      gvector(const T& vec) : _buffer(&pacxx::v2::get_executor().allocate<typename T::value_type>(vec.size())),
+      gvector(T& vec) : _buffer(&pacxx::v2::get_executor().allocate<typename T::value_type>(vec.size())),
                               _size(vec.size()) {
         _buffer->upload(vec.data(), vec.size());
       }

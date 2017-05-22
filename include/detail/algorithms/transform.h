@@ -17,148 +17,68 @@
 namespace gstorm {
 namespace gpu {
 namespace algorithm {
-namespace detail {
-template<typename InTy, typename OutTy, typename UnaryFunc>
-struct transform_functorGPU {
-  void operator()(InTy in,
-                  OutTy out,
-                  size_t distance,
-                  UnaryFunc func) const {
-    auto id = get_global_id(0);
-    if (static_cast<size_t>(id) >= distance)
-      return;
-
-    *(out + id) = func(*(in + id));
-  }
-  void operator()(InTy in,
-                  OutTy out,
-                  UnaryFunc func) const {
-    auto id = get_global_id(0) + get_global_id(1) * get_grid_size(0);
-
-    *(out + id) = func(*(in + id));
-  }
-
-};
-
-template<typename InTy, typename OutTy, typename UnaryFunc>
-struct transform_functorCPU {
-  void operator()(InTy in,
-                  OutTy out,
-                  size_t distance,
-                  UnaryFunc func) const {
-    auto id = get_global_id(0);
-    if (static_cast<size_t>(id) >= distance)
-      return;
-
-    *(out + id) = func(*(in + id));
-  }
-  void operator()(InTy in,
-                  OutTy out,
-                  UnaryFunc func) const {
-    auto id = get_global_id(0) + get_global_id(1) * get_grid_size(0);
-
-    *(out + id) = func(*(in + id));
-  }
-
-};
 
 template<typename InRng, typename OutRng, typename UnaryFunc>
-auto transformGPUNvidia(InRng &&in, OutRng &out, UnaryFunc &&func) {
+auto transformGeneric(InRng &&in, OutRng &out, UnaryFunc &&func) {
   constexpr size_t thread_count = 128;
 
-  auto distance = ranges::v3::distance(in);
+  int distance = ranges::v3::distance(in);
 
-  using FunctorTy = transform_functorGPU<decltype(in.begin()), decltype(out.begin()), UnaryFunc>;
+  auto inIt = in.begin();
+  auto outIt = out.begin();
 
-  auto kernel = pacxx::v2::kernel<FunctorTy, pacxx::v2::Target::GPU>(
-      FunctorTy(),
-      {{(distance + thread_count - 1) / thread_count},
-       {thread_count}, 0});
+  auto functor = [=] {
+    auto id = get_global_id(0) + get_global_id(1) * get_grid_size(0);
+    if (id < distance)
+      *(outIt + id) = func(*(inIt + id));
+  };
 
-  kernel(in.begin(), out.begin(), distance, func);
+  auto kernel = pacxx::v2::kernel(functor, {{(distance + thread_count - 1) / thread_count},
+                                            {thread_count}, 0});
+
+  kernel();
 }
 
 template<typename InRng, typename OutRng, typename UnaryFunc, typename CallbackFunc>
-auto transformGPUNvidia(InRng &&in, OutRng &out, UnaryFunc &&func, CallbackFunc &&callback) {
+auto transformGeneric(InRng &&in,
+                      OutRng &out, UnaryFunc
+                      &&func,
+                      CallbackFunc &&callback) {
   constexpr size_t thread_count = 128;
+  int distance = ranges::v3::distance(in);
 
-  auto distance = ranges::v3::distance(in);
+  auto inIt = in.begin();
+  auto outIt = out.begin();
 
-  using FunctorTy = transform_functorGPU<decltype(in.begin()), decltype(out.begin()), UnaryFunc>;
+  auto functor = [=] {
+    auto id = get_global_id(0) + get_global_id(1) * get_grid_size(0);
+    if (id < distance)
+      *(outIt + id) = func(*(inIt + id));
+  };
 
-  auto kernel = pacxx::v2::kernel_with_cb<FunctorTy, CallbackFunc, pacxx::v2::Target::GPU>(
-      FunctorTy(),
-      {{(distance + thread_count - 1) / thread_count},
-       {thread_count}, 0}, std::forward<CallbackFunc>(callback));
+  auto kernel = pacxx::v2::kernel_with_cb(functor,
+                                          {{(distance + thread_count - 1) / thread_count},
+                                           {thread_count}, 0},
+                                          std::forward<CallbackFunc>(callback));
 
-  kernel(in.begin(), out.begin(), distance, func);
-}
-
-template<typename InRng, typename OutRng, typename UnaryFunc>
-auto transformCPU(InRng &&in, OutRng &out, UnaryFunc &&func) {
-  constexpr size_t thread_count = 128;
-
-  auto distance = ranges::v3::distance(in);
-
-  using FunctorTy = transform_functorCPU<decltype(in.begin()), decltype(out.begin()), UnaryFunc>;
-
-  auto kernel = pacxx::v2::kernel<FunctorTy, pacxx::v2::Target::GPU>(
-      FunctorTy(),
-      {{(distance + thread_count - 1) / thread_count},
-       {thread_count}, 0});
-
-  kernel(in.begin(), out.begin(), distance, func);
-}
-
-template<typename InRng, typename OutRng, typename UnaryFunc, typename CallbackFunc>
-auto transformCPU(InRng &&in, OutRng &out, UnaryFunc &&func, CallbackFunc &&callback) {
-  constexpr size_t thread_count = 128;
-
-  auto distance = ranges::v3::distance(in);
-
-  using FunctorTy = transform_functorCPU<decltype(in.begin()), decltype(out.begin()), UnaryFunc>;
-
-  auto kernel = pacxx::v2::kernel_with_cb<FunctorTy, CallbackFunc, pacxx::v2::Target::GPU>(
-      FunctorTy(),
-      {{(distance + thread_count - 1) / thread_count},
-       {thread_count}, 0}, std::forward<CallbackFunc>(callback));
-
-  kernel(in.begin(), out.begin(), distance, func);
-}
+  kernel();
 }
 
 template<typename InRng, typename OutRng, typename UnaryFunc>
 auto transform(InRng &&in, OutRng &out, UnaryFunc &&func) {
-  using namespace pacxx::v2;
-  auto &exec = Executor::get(0); // get default executor
 
-  switch (exec.getExecutingDeviceType()) {
-  case ExecutingDevice::GPUNvidia:
-    return detail::transformGPUNvidia(std::forward<InRng>(in),
-                                      out,
-                                      std::forward<UnaryFunc>(func));
-  case ExecutingDevice::CPU:return detail::transformCPU(std::forward<InRng>(in), out,
-                                                        std::forward<UnaryFunc>(func));
-  }
+  return transformGeneric(std::forward<InRng>(in),
+                          out,
+                          std::forward<UnaryFunc>(func));
+
 }
 
 template<typename InRng, typename OutRng, typename UnaryFunc, typename CallbackFunc>
 auto transform(InRng &&in, OutRng &out, UnaryFunc &&func, CallbackFunc &&callback) {
-  using namespace pacxx::v2;
-  auto &exec = Executor::get(0); // get default executor
-
-  switch (exec.getExecutingDeviceType()) {
-  case ExecutingDevice::GPUNvidia:
-    return detail::transformGPUNvidia(std::forward<InRng>(in),
-                                      out,
-                                      std::forward<UnaryFunc>(func),
-                                      callback);
-  case ExecutingDevice::CPU:
-    return detail::transformCPU(std::forward<InRng>(in),
-                                out,
-                                std::forward<UnaryFunc>(func),
-                                callback);
-  }
+  return transformGeneric(std::forward<InRng>(in),
+                          out,
+                          std::forward<UnaryFunc>(func),
+                          callback);
 }
 
 }

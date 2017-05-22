@@ -51,11 +51,16 @@ struct reduce_functorGPUNvidia {
   using value_type = std::remove_reference_t<decltype(*std::declval<InTy>())>;
 private:
   BinaryFunc func;
+  InTy in;
+  OutTy out;
+  int distance;
+  int ept;
 public:
 
-  reduce_functorGPUNvidia(BinaryFunc &&f) : func(f) {}
+  reduce_functorGPUNvidia(BinaryFunc &&f, InTy in, OutTy out, int distance, int ept)
+      : func(f), in(in), out(out), distance(distance), ept(ept) {}
 
-  void operator()(InTy in, OutTy out, size_t distance, size_t ept) const {
+  void operator()() const {
     pacxx::v2::shared_memory <value_type> sdata;
     size_t tid = get_local_id(0);
 
@@ -144,11 +149,14 @@ struct reduce_functorCPU {
   using value_type = std::remove_reference_t<decltype(*std::declval<InTy>())>;
 private:
   BinaryFunc func;
+  InTy in;
+  OutTy out;
+  size_t wpt;
 public:
 
-  reduce_functorCPU(BinaryFunc &&f) : func(f) {}
+  reduce_functorCPU(BinaryFunc &&f, InTy in, OutTy out, size_t wpt) : func(f), in(in), out(out), wpt(wpt) {}
 
-  void operator()(InTy in, OutTy out, size_t wpt) const {
+  void operator()() const {
 
     value_type sum = 0;
 
@@ -193,11 +201,12 @@ auto reduceGPUNvidia(InRng &&in, std::remove_reference_t<decltype(*in.begin())> 
 
   using FunctorTy = reduce_functorGPUNvidia<decltype(in.begin()), decltype(out.begin()), BinaryFunc>;
 
-  auto kernel = pacxx::v2::kernel<FunctorTy, pacxx::v2::Target::GPU>(
-      FunctorTy(std::forward<BinaryFunc>(func)),
-      {{block_count}, {thread_count}, 0, thread_count * sizeof(value_type)});
+  auto functor = FunctorTy(std::forward<BinaryFunc>(func), in.begin(), out.begin(), distance, ept);
+  auto kernel = pacxx::v2::kernel<FunctorTy, pacxx::v2::Target::CPU>(functor,
+                                                                     {{block_count}, {thread_count}, 0,
+                                                                      thread_count * sizeof(value_type)});
 
-  kernel(in.begin(), out.begin(), distance, ept);
+  kernel();
 
   result = out;
 
@@ -225,12 +234,12 @@ auto reduceCPU(InRng &&in, std::remove_reference_t<decltype(*in.begin())> init, 
 
 
   using FunctorTy = reduce_functorCPU<decltype(in.begin()), decltype(out.begin()), BinaryFunc>;
-
+  auto functor = FunctorTy(std::forward<BinaryFunc>(func), in.begin(), out.begin(), wpt);
   auto kernel = pacxx::v2::kernel<FunctorTy, pacxx::v2::Target::CPU>(
-      FunctorTy(std::forward<BinaryFunc>(func)),
+      functor,
       {{block_count}, {thread_count}, 0, 0});
 
-  kernel(in.begin(), out.begin(), wpt);
+  kernel();
 
   result = out;
 
@@ -252,15 +261,15 @@ auto reduce(InRng &&in, std::remove_reference_t<decltype(*in.begin())> init, Bin
   using namespace pacxx::v2;
   auto &exec = Executor::get(0); // get default executor
 
-  switch (exec.getExecutingDeviceType()) {
-  case ExecutingDevice::GPUNvidia:
-    return detail::reduceGPUNvidia(std::forward<InRng>(in),
-                                   init,
-                                   std::forward<BinaryFunc>(func));
-  case ExecutingDevice::CPU:return detail::reduceCPU(std::forward<InRng>(in), init, std::forward<BinaryFunc>(func));
-  }
+//  switch (exec.getExecutingDeviceType()) {
+//  case ExecutingDevice::GPUNvidia:
+  return detail::reduceGPUNvidia(std::forward<InRng>(in),
+                                 init,
+                                 std::forward<BinaryFunc>(func));
+//  case ExecutingDevice::CPU:return detail::reduceCPU(std::forward<InRng>(in), init, std::forward<BinaryFunc>(func));
+//  }
 
-  return init;
+//  return init;
 }
 }
 }

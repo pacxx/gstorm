@@ -242,8 +242,7 @@ auto reduceCPU(InRng &&in, std::remove_reference_t<decltype(*in.begin())> init, 
   kernel();
 
   result = out;
-  for (auto v : result)
-    __message(v);
+
   result_val = ranges::v3::accumulate(result, init, func);
 
   if (remainder) {

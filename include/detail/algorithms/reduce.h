@@ -169,7 +169,7 @@ public:
       sum = func(sum, *(in + i + j));
     }
 
-    *(out + bid) = sum;
+    *(out + config.get_global(0)) = sum;
 
   }
 };
@@ -242,7 +242,8 @@ auto reduceCPU(InRng &&in, std::remove_reference_t<decltype(*in.begin())> init, 
   kernel();
 
   result = out;
-
+  for (auto v : result)
+    __message(v);
   result_val = ranges::v3::accumulate(result, init, func);
 
   if (remainder) {

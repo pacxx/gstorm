@@ -161,15 +161,15 @@ public:
     value_type sum = 0;
 
     const auto tid = config.get_local(0);
-    const auto gid = config.get_global(0);
-    const auto gsize = config.get_block_size(0);
-    size_t i = tid * wpt + gid * gsize * wpt;
+    const auto bid = config.get_block(0);
+    const auto bsize = config.get_block_size(0);
+    size_t i = tid * wpt + bid * bsize * wpt;
 
     for (size_t j = 0; j < wpt; ++j) {
       sum = func(sum, *(in + i + j));
     }
 
-    *(out + gid) = sum;
+    *(out + bid) = sum;
 
   }
 };

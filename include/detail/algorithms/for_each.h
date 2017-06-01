@@ -27,10 +27,10 @@ namespace gstorm {
 
         auto inIt = in.begin();
 
-        auto for_each_functor = [=]{
-            auto id = get_global_id(0);
+        auto for_each_functor = [=](auto &config) {
+          auto id = config.get_global(0);
             if (static_cast<size_t>(id) >= distance) return;
-            func(*(in + id));
+          func(*(inIt + id));
         };
 
         auto kernel = pacxx::v2::kernel(

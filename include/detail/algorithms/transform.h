@@ -27,8 +27,8 @@ auto transformGeneric(InRng &&in, OutRng &out, UnaryFunc &&func) {
   auto inIt = in.begin();
   auto outIt = out.begin();
 
-  auto functor = [=] {
-    auto id = get_global_id(0) + get_global_id(1) * get_grid_size(0);
+  auto functor = [=](auto &config) {
+    auto id = config.get_global(0);
     if (id < distance)
       *(outIt + id) = func(*(inIt + id));
   };
@@ -50,8 +50,8 @@ auto transformGeneric(InRng &&in,
   auto inIt = in.begin();
   auto outIt = out.begin();
 
-  auto functor = [=] {
-    auto id = get_global_id(0) + get_global_id(1) * get_grid_size(0);
+  auto functor = [=](auto &config) {
+    auto id = config.get_global(0);
     if (id < distance)
       *(outIt + id) = func(*(inIt + id));
   };

@@ -60,17 +60,17 @@ public:
   reduce_functorGPUNvidia(BinaryFunc &&f, InTy in, OutTy out, int distance, int ept)
       : func(f), in(in), out(out), distance(distance), ept(ept) {}
 
-  void operator()() const {
+  void operator()(pacxx::v2::range &config) const {
     pacxx::v2::shared_memory <value_type> sdata;
-    size_t tid = get_local_id(0);
+    size_t tid = config.get_local(0);
 
     auto n = distance;
     int elements_per_thread = pacxx::v2::_stage([&] { return ept; });
 
     value_type sum = 0;
 
-    size_t gridSize = get_local_size(0) * get_num_groups(0);
-    size_t i = get_global_id(0);
+    size_t gridSize = config.get_block_size(0) * config.get_num_blocks(0);
+    size_t i = config.get_global(0);
 
     for (int x = 0; x < elements_per_thread; ++x) {
       sum = func(sum, *(in + i));
@@ -83,52 +83,52 @@ public:
     }
 
     sdata[tid] = sum;
-    barrier(1);
-    if (get_local_size(0) >= 1024) {
+    config.synchronize();
+    if (config.get_block_size(0) >= 1024) {
       if (tid < 512)
         sdata[tid] = func(sdata[tid], sdata[tid + 512]);
-      barrier(1);
+      config.synchronize();
     }
-    if (get_local_size(0) >= 512) {
+    if (config.get_block_size(0) >= 512) {
       if (tid < 256)
         sdata[tid] = func(sdata[tid], sdata[tid + 256]);
-      barrier(1);
+      config.synchronize();
     }
-    if (get_local_size(0) >= 256) {
+    if (config.get_block_size(0) >= 256) {
       if (tid < 128)
         sdata[tid] = func(sdata[tid], sdata[tid + 128]);
-      barrier(1);
+      config.synchronize();
     }
     if (tid < 64)
       sdata[tid] = func(sdata[tid], sdata[tid + 64]);
-    barrier(1);
+    config.synchronize();
 
     if (tid < 32)
       sdata[tid] = func(sdata[tid], sdata[tid + 32]);
-    barrier(1);
+    config.synchronize();
 
     if (tid < 16)
       sdata[tid] = func(sdata[tid], sdata[tid + 16]);
-    barrier(1);
+    config.synchronize();
 
     if (tid < 8)
       sdata[tid] = func(sdata[tid], sdata[tid + 8]);
-    barrier(1);
+    config.synchronize();
 
     if (tid < 4)
       sdata[tid] = func(sdata[tid], sdata[tid + 4]);
-    barrier(1);
+    config.synchronize();
 
     if (tid < 2)
       sdata[tid] = func(sdata[tid], sdata[tid + 2]);
-    barrier(1);
+    config.synchronize();
 
     if (tid < 1)
       sdata[tid] = func(sdata[tid], sdata[tid + 1]);
-    barrier(1);
+    config.synchronize();
 
     if (tid == 0)
-      *(out + static_cast<size_t>(get_group_id(0))) = sdata[tid];
+      *(out + static_cast<size_t>(config.get_block(0))) = sdata[tid];
 
 //    if (tid < 32) {
 //      volatile value_type *sm = &sdata[0];
@@ -156,20 +156,20 @@ public:
 
   reduce_functorCPU(BinaryFunc &&f, InTy in, OutTy out, size_t wpt) : func(f), in(in), out(out), wpt(wpt) {}
 
-  void operator()() const {
+  void operator()(pacxx::v2::range &config) const {
 
     value_type sum = 0;
 
-    const auto tid = get_local_id(0);
-    const auto gid = get_group_id(0);
-    const auto gsize = get_local_size(0);
+    const auto tid = config.get_local(0);
+    const auto gid = config.get_global(0);
+    const auto gsize = config.get_block_size(0);
     size_t i = tid * wpt + gid * gsize * wpt;
 
     for (size_t j = 0; j < wpt; ++j) {
       sum = func(sum, *(in + i + j));
     }
 
-    *(out + static_cast<size_t>(get_global_id(0))) = sum;
+    *(out + gid) = sum;
 
   }
 };

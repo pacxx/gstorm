@@ -33,10 +33,9 @@ auto transformGeneric(InRng &&in, OutRng &out, UnaryFunc &&func) {
       *(outIt + id) = func(*(inIt + id));
   };
 
-  auto kernel = pacxx::v2::kernel(functor, {{(distance + thread_count - 1) / thread_count},
-                                            {thread_count}, 0});
+  pacxx::v2::Executor::get().launch(functor, {{(distance + thread_count - 1) / thread_count},
+                                              {thread_count}, 0});
 
-  kernel();
 }
 
 template<typename InRng, typename OutRng, typename UnaryFunc, typename CallbackFunc>
@@ -56,12 +55,10 @@ auto transformGeneric(InRng &&in,
       *(outIt + id) = func(*(inIt + id));
   };
 
-  auto kernel = pacxx::v2::kernel_with_cb(functor,
-                                          {{(distance + thread_count - 1) / thread_count},
+  pacxx::v2::Executor::get().launch_with_callback(functor,
+                                                  {{(distance + thread_count - 1) / thread_count},
                                            {thread_count}, 0},
-                                          std::forward<CallbackFunc>(callback));
-
-  kernel();
+                                                  std::forward<CallbackFunc>(callback));
 }
 
 template<typename InRng, typename OutRng, typename UnaryFunc>

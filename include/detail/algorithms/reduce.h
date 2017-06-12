@@ -191,7 +191,7 @@ auto reduceGPUNvidia(InRng &&in, std::remove_reference_t<decltype(*in.begin())> 
   }
 
   size_t block_count = std::max(distance / thread_count + (distance % thread_count > 0 ? 1 : 0), 1ul);
-  const size_t max_blocks = pacxx::v2::Executor::get(0).getConcurrentCores() * 10;
+  const size_t max_blocks = pacxx::v2::Executor::get().getConcurrentCores() * 10;
   block_count = std::min(block_count, max_blocks);
   ept = distance / (thread_count * block_count);
 
@@ -202,11 +202,11 @@ auto reduceGPUNvidia(InRng &&in, std::remove_reference_t<decltype(*in.begin())> 
   using FunctorTy = reduce_functorGPUNvidia<decltype(in.begin()), decltype(out.begin()), BinaryFunc>;
 
   auto functor = FunctorTy(std::forward<BinaryFunc>(func), in.begin(), out.begin(), distance, ept);
-  auto kernel = pacxx::v2::kernel<FunctorTy, pacxx::v2::Target::GPU>(functor,
-                                                                     {{block_count}, {thread_count}, 0,
+  pacxx::v2::Executor::get().launch<FunctorTy, pacxx::v2::Target::GPU>(functor,
+                                                                       {{block_count}, {thread_count}, 0,
                                                                       thread_count * sizeof(value_type)});
 
-  kernel();
+
 
   result = out;
 
@@ -235,11 +235,9 @@ auto reduceCPU(InRng &&in, std::remove_reference_t<decltype(*in.begin())> init, 
 
   using FunctorTy = reduce_functorCPU<decltype(in.begin()), decltype(out.begin()), BinaryFunc>;
   auto functor = FunctorTy(std::forward<BinaryFunc>(func), in.begin(), out.begin(), wpt);
-  auto kernel = pacxx::v2::kernel<FunctorTy, pacxx::v2::Target::CPU>(
+  pacxx::v2::Executor::get().launch<FunctorTy, pacxx::v2::Target::CPU>(
       functor,
       {{block_count}, {thread_count}, 0, 0});
-
-  kernel();
 
   result = out;
 
@@ -259,7 +257,7 @@ auto reduceCPU(InRng &&in, std::remove_reference_t<decltype(*in.begin())> init, 
 template<typename InRng, typename BinaryFunc>
 auto reduce(InRng &&in, std::remove_reference_t<decltype(*in.begin())> init, BinaryFunc &&func) {
   using namespace pacxx::v2;
-  auto &exec = Executor::get(0); // get default executor
+  auto &exec = Executor::get(); // get default executor
 
   switch (exec.getExecutingDeviceType()) {
   case ExecutingDevice::GPUNvidia:

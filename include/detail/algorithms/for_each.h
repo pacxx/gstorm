@@ -36,7 +36,7 @@ namespace gstorm {
         pacxx::v2::Executor::get().launch(
             for_each_functor,
             {{(distance + thread_count - 1) / thread_count},
-             {thread_count}, 0, 0});
+             {thread_count}, 0});
       };
     }
   }

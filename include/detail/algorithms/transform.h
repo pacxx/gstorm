@@ -40,8 +40,7 @@ auto transformGeneric(InRng &&in, OutRng &out, UnaryFunc &&func) {
 
 template<typename InRng, typename OutRng, typename UnaryFunc, typename CallbackFunc>
 auto transformGeneric(InRng &&in,
-                      OutRng &out, UnaryFunc
-                      &&func,
+                      OutRng &out, UnaryFunc &&func,
                       CallbackFunc &&callback) {
   constexpr size_t thread_count = 128;
   int distance = ranges::v3::distance(in);

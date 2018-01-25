@@ -4,64 +4,59 @@
 
 #pragma once
 
-#include <cstddef>
-#include <range/v3/all.hpp>
 #include <PACXX.h>
-#include <detail/ranges/vector.h>
+#include <cstddef>
 #include <detail/common/Timing.h>
+#include <detail/ranges/vector.h>
+#include <range/v3/all.hpp>
 
 namespace gstorm {
 
 namespace meta {
-template<int First, int Last, typename Fn>
-struct _static_for {
+template <int First, int Last, typename Fn> struct _static_for {
   _static_for(Fn f) : func(f) {}
 
-  template<typename T>
-  auto operator()(T init, T y) const {
+  template <typename T> auto operator()(T init, T y) const {
     return _static_for<First + 1, Last, Fn>(func)(init, func(init, y));
   }
 
   Fn func;
 };
 
-template<int N, typename Fn>
-struct _static_for<N, N, Fn> {
+template <int N, typename Fn> struct _static_for<N, N, Fn> {
   _static_for(Fn f) {}
 
-  template<typename T>
-  auto operator()(T init, T y) const {
-    return y;
-  }
+  template <typename T> auto operator()(T init, T y) const { return y; }
 };
 
-template<int First, int Last, typename Fn>
-auto static_for(Fn f) {
+template <int First, int Last, typename Fn> auto static_for(Fn f) {
   return _static_for<First, Last, Fn>(f);
 }
 
-}
+} // namespace meta
 
 namespace gpu {
 namespace algorithm {
 namespace detail {
 
-template<typename InTy, typename OutTy, typename BinaryFunc>
+template <typename InTy, typename OutTy, typename BinaryFunc>
 struct reduce_functorGPUNvidia {
   using value_type = std::remove_reference_t<decltype(*std::declval<InTy>())>;
+
 private:
   BinaryFunc func;
   InTy in;
   OutTy out;
   int distance;
   int ept;
-public:
 
-  reduce_functorGPUNvidia(BinaryFunc &&f, InTy in, OutTy out, int distance, int ept)
+public:
+  reduce_functorGPUNvidia(BinaryFunc &&f, InTy in, OutTy out, int distance,
+                          int ept)
       : func(f), in(in), out(out), distance(distance), ept(ept) {}
 
   void operator()(pacxx::v2::range &config) const {
-    //pacxx::v2::shared_memory <value_type> sdata;
+    // pacxx::v2::shared_memory <value_type> sdata;
 
     [[pacxx::shared]] extern value_type sdata[];
 
@@ -133,31 +128,33 @@ public:
     if (tid == 0)
       *(out + static_cast<size_t>(config.get_block(0))) = sdata[tid];
 
-//    if (tid < 32) {
-//      volatile value_type *sm = &sdata[0];
-//      sm[tid] = func(sm[tid], sm[tid + 32]);
-//      sm[tid] = func(sm[tid], sm[tid + 16]);
-//      sm[tid] = func(sm[tid], sm[tid + 8]);
-//      sm[tid] = func(sm[tid], sm[tid + 4]);
-//      sm[tid] = func(sm[tid], sm[tid + 2]);
-//      sm[tid] = func(sm[tid], sm[tid + 1]);
-//    }
-//    if (tid == 0)
-//      *(out + static_cast<size_t>(get_group_id(0))) = sdata[tid];
+    //    if (tid < 32) {
+    //      volatile value_type *sm = &sdata[0];
+    //      sm[tid] = func(sm[tid], sm[tid + 32]);
+    //      sm[tid] = func(sm[tid], sm[tid + 16]);
+    //      sm[tid] = func(sm[tid], sm[tid + 8]);
+    //      sm[tid] = func(sm[tid], sm[tid + 4]);
+    //      sm[tid] = func(sm[tid], sm[tid + 2]);
+    //      sm[tid] = func(sm[tid], sm[tid + 1]);
+    //    }
+    //    if (tid == 0)
+    //      *(out + static_cast<size_t>(get_group_id(0))) = sdata[tid];
   }
 };
 
-template<typename InTy, typename OutTy, typename BinaryFunc>
+template <typename InTy, typename OutTy, typename BinaryFunc>
 struct reduce_functorCPU {
   using value_type = std::remove_reference_t<decltype(*std::declval<InTy>())>;
+
 private:
   BinaryFunc func;
   InTy in;
   OutTy out;
   size_t wpt;
-public:
 
-  reduce_functorCPU(BinaryFunc &&f, InTy in, OutTy out, size_t wpt) : func(f), in(in), out(out), wpt(wpt) {}
+public:
+  reduce_functorCPU(BinaryFunc &&f, InTy in, OutTy out, size_t wpt)
+      : func(f), in(in), out(out), wpt(wpt) {}
 
   void operator()(pacxx::v2::range &config) const {
 
@@ -173,12 +170,13 @@ public:
     }
 
     *(out + config.get_global(0)) = sum;
-
   }
 };
 
-template<typename InRng, typename BinaryFunc>
-auto reduceGPUNvidia(InRng &&in, std::remove_reference_t<decltype(*in.begin())> init, BinaryFunc &&func) {
+template <typename InRng, typename BinaryFunc>
+auto reduceGPUNvidia(InRng &&in,
+                     std::remove_reference_t<decltype(*in.begin())> init,
+                     BinaryFunc &&func) {
   auto result_val = init;
 
   size_t distance = ranges::v3::distance(in);
@@ -193,8 +191,10 @@ auto reduceGPUNvidia(InRng &&in, std::remove_reference_t<decltype(*in.begin())> 
     } while (distance / (thread_count * ept) > 130);
   }
 
-  size_t block_count = std::max(distance / thread_count + (distance % thread_count > 0 ? 1 : 0), 1ul);
-  const size_t max_blocks = pacxx::v2::Executor::get().getConcurrentCores() * 10;
+  size_t block_count = std::max(
+      distance / thread_count + (distance % thread_count > 0 ? 1 : 0), 1ul);
+  const size_t max_blocks =
+      pacxx::v2::Executor::get().getConcurrentCores() * 10;
   block_count = std::min(block_count, max_blocks);
   block_count = distance / thread_count;
   ept = distance / (thread_count * block_count);
@@ -202,17 +202,17 @@ auto reduceGPUNvidia(InRng &&in, std::remove_reference_t<decltype(*in.begin())> 
 
   using value_type = std::remove_reference_t<decltype(*in.begin())>;
   std::vector<value_type> result(block_count, value_type());
-  range::gvector <std::vector<value_type>> out(result);
+  range::gvector<std::vector<value_type>> out(result);
 
-  using FunctorTy = reduce_functorGPUNvidia<decltype(in.begin()), decltype(out.begin()), BinaryFunc>;
+  using FunctorTy = reduce_functorGPUNvidia<decltype(in.begin()),
+                                            decltype(out.begin()), BinaryFunc>;
 
-  auto functor = FunctorTy(std::forward<BinaryFunc>(func), in.begin(), out.begin(), distance, ept);
-  pacxx::v2::Executor::get().launch<FunctorTy, pacxx::v2::Target::CPU>(functor,
-                                                                       {{block_count}, {thread_count},
-                                                                      thread_count * sizeof(value_type)});
+  auto functor = FunctorTy(std::forward<BinaryFunc>(func), in.begin(),
+                           out.begin(), distance, ept);
 
-
-
+  pacxx::v2::Executor::get().launch<FunctorTy, pacxx::v2::Target::GPU>(
+      functor,
+      {{block_count}, {thread_count}, thread_count * sizeof(value_type)});
   result = out;
 
   result_val = ranges::v3::accumulate(result, init, func);
@@ -220,8 +220,9 @@ auto reduceGPUNvidia(InRng &&in, std::remove_reference_t<decltype(*in.begin())> 
   return result_val;
 };
 
-template<typename InRng, typename BinaryFunc>
-auto reduceCPU(InRng &&in, std::remove_reference_t<decltype(*in.begin())> init, BinaryFunc &&func) {
+template <typename InRng, typename BinaryFunc>
+auto reduceCPU(InRng &&in, std::remove_reference_t<decltype(*in.begin())> init,
+               BinaryFunc &&func) {
   auto result_val = init;
   using value_type = decltype(init);
   auto &exec = pacxx::v2::Executor::get(0);
@@ -232,49 +233,52 @@ auto reduceCPU(InRng &&in, std::remove_reference_t<decltype(*in.begin())> init, 
   size_t block_count = exec.getConcurrentCores();
 
   std::vector<value_type> result(block_count * thread_count, value_type());
-  range::gvector <std::vector<value_type>> out(result);
+  range::gvector<std::vector<value_type>> out(result);
 
   size_t wpt = distance / (block_count * thread_count);
   bool remainder = distance % (block_count * thread_count) != 0;
 
-
-  using FunctorTy = reduce_functorCPU<decltype(in.begin()), decltype(out.begin()), BinaryFunc>;
-  auto functor = FunctorTy(std::forward<BinaryFunc>(func), in.begin(), out.begin(), wpt);
+  using FunctorTy = reduce_functorCPU<decltype(in.begin()),
+                                      decltype(out.begin()), BinaryFunc>;
+  auto functor =
+      FunctorTy(std::forward<BinaryFunc>(func), in.begin(), out.begin(), wpt);
   pacxx::v2::Executor::get().launch<FunctorTy, pacxx::v2::Target::CPU>(
-      functor,
-      {{block_count}, {thread_count}, 0});
+      functor, {{block_count}, {thread_count}, 0});
 
   result = out;
 
   result_val = ranges::v3::accumulate(result, init, func);
 
   if (remainder) {
-    auto rem = ranges::view::counted(in.begin() + wpt * block_count * thread_count,
-                                     distance - (wpt * block_count * thread_count));
+    auto rem =
+        ranges::view::counted(in.begin() + wpt * block_count * thread_count,
+                              distance - (wpt * block_count * thread_count));
     result_val = ranges::v3::accumulate(rem, result_val, func);
   }
 
   return result_val;
 };
 
-}
+} // namespace detail
 
-template<typename InRng, typename BinaryFunc>
-auto reduce(InRng &&in, std::remove_reference_t<decltype(*in.begin())> init, BinaryFunc &&func) {
+template <typename InRng, typename BinaryFunc>
+auto reduce(InRng &&in, std::remove_reference_t<decltype(*in.begin())> init,
+            BinaryFunc &&func) {
   using namespace pacxx::v2;
   auto &exec = Executor::get(); // get default executor
 
-//  switch (exec.getExecutingDeviceType()) {
-//  case ExecutingDevice::GPUNvidia:
-  return detail::reduceGPUNvidia(std::forward<InRng>(in),
-                                 init,
-                                 std::forward<BinaryFunc>(func));
-//  case ExecutingDevice::CPU:return detail::reduceCPU(std::forward<InRng>(in), init, std::forward<BinaryFunc>(func));
- // }
+  switch (exec.getExecutingDeviceType()) {
+  case ExecutingDevice::GPUNvidia:
+  case ExecutingDevice::GPUAMD:
+    return detail::reduceGPUNvidia(std::forward<InRng>(in), init,
+                                   std::forward<BinaryFunc>(func));
+  case ExecutingDevice::CPU:
+    return detail::reduceCPU(std::forward<InRng>(in), init,
+                             std::forward<BinaryFunc>(func));
+  }
 
-//  return init;
+  return init;
 }
-}
-}
-}
-
+} // namespace algorithm
+} // namespace gpu
+} // namespace gstorm

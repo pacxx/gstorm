@@ -147,13 +147,11 @@ namespace gstorm {
 
       gvector(size_t size) : _buffer(&pacxx::v2::get_executor().allocate<typename T::value_type>(size)),
                              _size(size) {
-//        __message("allocated ", (void*)_buffer);
       }
 
       gvector(size_t size, value_type value) : _buffer(
           &pacxx::v2::get_executor().allocate<typename T::value_type>(size)),
                                                _size(size) {
-//        __message("allocated ", (void*)_buffer);
         gpu::algorithm::fill(*this, value);
       }
 
@@ -165,14 +163,10 @@ namespace gstorm {
       ~gvector() {
 //        __message("destroyed ", (void*)_buffer);
         if (_buffer)
-          _buffer->abandon();
+          pacxx::v2::get_executor().free(*_buffer); 
       }
 
       gvector(const gvector& src) = delete;
-//      gvector(const gvector& src) : _buffer(&pacxx::v2::get_executor().allocate<typename T::value_type>(src.size())),
-//      _size(src.size()){
-//        src._buffer->copyTo(_buffer->get());
-//      }
 
       gvector(gvector&& other) {
         _buffer = other._buffer;
@@ -181,17 +175,13 @@ namespace gstorm {
         other._size = 0;
       }
 
-//      gvector& operator=(const gvector& src) = delete;
       gvector& operator=(const gvector& src) {
           src._buffer->copyTo(_buffer->get());
-//        gpu::algorithm::transform(src, *this, [](auto&& v) { return v; });
         return *this;
       }
 
-//      gvector& operator=(gvector&& other) = delete;
       gvector& operator=(gvector&& other) {
         _buffer = other._buffer;
-        //     __message("moved ", (void*)_buffer);
         other._buffer = nullptr;
         _size = other._size;
         other._size = 0;
@@ -214,7 +204,7 @@ namespace gstorm {
           _buffer->copyTo(new_buffer->get());
         _size = size;
         if (_buffer)
-          _buffer->abandon();
+          pacxx::v2::get_executor().free(*_buffer); 
         _buffer = new_buffer;
       }
 

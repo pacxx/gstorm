@@ -13,7 +13,7 @@
 #include <detail/ranges/vector.h>
 #include <meta/static_const.h>
 
-#include <detail/common/Meta.h>
+#include <pacxx/detail/common/Meta.h>
 
 namespace gstorm {
   namespace gpu {

@@ -6,7 +6,7 @@
 
 #include <PACXX.h>
 #include <cstddef>
-#include <detail/common/Timing.h>
+#include <pacxx/detail/common/Timing.h>
 #include <detail/ranges/vector.h>
 #include <range/v3/all.hpp>
 
